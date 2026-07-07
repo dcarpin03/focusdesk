@@ -161,6 +161,11 @@
   color: #fffaf5;
 }
 
+.primary-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .secondary-button {
   border: 1px solid #e0d4c7;
   background: #fffaf5;

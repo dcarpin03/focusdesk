@@ -1,6 +1,45 @@
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  const [isRunning, setIsRunning] = useState(false)
+
+  const formatTime = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600)
+    const minutes = Math.floor((totalSeconds % 3600) / 60)
+    const seconds = totalSeconds % 60
+
+    return [hours, minutes, seconds]
+    .map((value) => String(value).padStart(2, '0'))
+    .join(':')
+  }
+
+  useEffect(() => {
+    if(!isRunning){
+      return
+    }
+
+    //Crea intervalo que se ejecuta cada segundo, coge valor actual y le suma 1
+    const intervalId = window.setInterval(() => {
+      setElapsedSeconds((currentSeconds) => currentSeconds + 1)
+    }, 1000)
+
+    //Limpiar intervalo cuándo no haga falta
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [isRunning])
+
+  const handleStartTimer = () => {
+    setIsRunning(true)
+  }
+
+  const handleStopTimer = () => {
+    setIsRunning(false)
+    setElapsedSeconds(0)
+  }
+
   return (
     <div className='app'>
       <header className='app-header'>
@@ -35,17 +74,17 @@ function App() {
 
           <div className='timer-display'>
             <div className='timer-circle'>
-              <p className='timer-time'>00:00:00</p>
+              <p className='timer-time'>{formatTime(elapsedSeconds)}</p>
               <p className='timer-label'>Tiempo de estudio</p>
             </div>
           </div>
 
           <div className='timer-actions'>
-            <button type='button' className='primary-button'>
-              ▶ Iniciar
+            <button type='button' className='primary-button' onClick={handleStartTimer}>
+              {isRunning ? '▶ En curso' : '▶ Iniciar'}
             </button>
 
-            <button type='button' className='secondary-button'>
+            <button type='button' className='secondary-button' onClick={handleStopTimer}>
               ■ Detener
             </button>
           </div>
