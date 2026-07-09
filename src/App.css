@@ -291,11 +291,20 @@
 }
 
 .task-menu {
+  width: 32px;
+  height: 32px;
   border: 0;
+  border-radius: 999px;
   background: transparent;
   color: #8c8178;
   font-size: 1.4rem;
+  line-height: 1;
   cursor: pointer;
+}
+
+.task-menu:hover {
+  background: #f8eadf;
+  color: #c87943;
 }
 
 .timer-card,

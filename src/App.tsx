@@ -21,6 +21,7 @@ function App() {
   const [sessions, setSessions] = useState<StudySession[]>([])
   const [taskTitle, setTaskTitle] = useState('')
   const [tasks, setTasks] = useState<Task[]>([])
+  const [isStorageLoaded, setIsStorageLoaded] = useState(false)
 
   const formatTime = (totalSeconds: number) => {
     const hours = Math.floor(totalSeconds / 3600)
@@ -47,6 +48,35 @@ function App() {
       window.clearInterval(intervalId)
     }
   }, [isRunning])
+
+  useEffect(() => {
+    const loadStoredData = async () => {
+      const storedTasks = await window.focusDeskStorage.getTasks()
+      const storedSessions = await window.focusDeskStorage.getSessions()
+
+      setTasks(storedTasks)
+      setSessions(storedSessions)
+      setIsStorageLoaded(true)
+    }
+
+    loadStoredData()
+  }, [])
+
+  useEffect(() => {
+    if(!isStorageLoaded){
+      return
+    }
+
+    window.focusDeskStorage.setTasks(tasks)
+  }, [tasks, isStorageLoaded])
+
+  useEffect(() => {
+    if (!isStorageLoaded) {
+      return
+    }
+
+    window.focusDeskStorage.setSessions(sessions)
+  }, [sessions, isStorageLoaded])
 
   const handleStartTimer = () => {
     setIsRunning(true)
@@ -92,6 +122,12 @@ function App() {
       currentTasks.map((task) => 
         task.id === taskId ? {...task, completed: !task.completed } : task
       )
+    )
+  }
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks((currentTasks) => 
+      currentTasks.filter((task) => task.id !== taskId)
     )
   }
 
@@ -191,8 +227,13 @@ function App() {
                       {task.completed ? 'Finalizada' : 'Pendiente'}
                     </span>
 
-                    <button type='button' className='task-menu'>
-                      ⋮
+                    <button 
+                      type='button' 
+                      className='task-menu'
+                      onClick={() => handleDeleteTask(task.id)}
+                      aria-label={`Eliminar tarea ${task.title}`}
+                      >
+                      x
                     </button>
                   </li>
                 ))
