@@ -365,3 +365,21 @@
   color: #756b62;
   white-space: nowrap;
 }
+
+.session-preview {
+  margin: -8px 0 0;
+  color: #756b62;
+  font-size: 0.9rem;
+}
+
+.history-empty {
+  padding: 18px 0;
+  color: #756b62;
+  list-style: none;
+}
+
+.task-empty {
+  padding: 18px 0;
+  color: #756b62;
+  list-style: none;
+}

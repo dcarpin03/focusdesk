@@ -1,9 +1,26 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+type StudySession = {
+  id: string
+  name: string
+  durationSeconds: number
+  date: string
+}
+
+type Task = {
+  id: string
+  title: string
+  completed: boolean
+}
+
 function App() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
+  const [sessionName, setSessionName] = useState('')
+  const [sessions, setSessions] = useState<StudySession[]>([])
+  const [taskTitle, setTaskTitle] = useState('')
+  const [tasks, setTasks] = useState<Task[]>([])
 
   const formatTime = (totalSeconds: number) => {
     const hours = Math.floor(totalSeconds / 3600)
@@ -36,8 +53,46 @@ function App() {
   }
 
   const handleStopTimer = () => {
+    if(elapsedSeconds === 0){
+      return
+    }
+
+    const newSession: StudySession = {
+      id: crypto.randomUUID(),
+      name: sessionName.trim() || 'Sesión sin nombre',
+      durationSeconds: elapsedSeconds,
+      date: new Date().toLocaleDateString('es-ES')
+    }
+
+    setSessions((currentSessions) => [newSession, ...currentSessions])
     setIsRunning(false)
     setElapsedSeconds(0)
+    setSessionName('')
+  }
+
+  const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if(taskTitle.trim() === ''){
+      return
+    }
+
+    const newTask: Task = {
+      id: crypto.randomUUID(),
+      title: taskTitle.trim(),
+      completed: false
+    }
+
+    setTasks((currentTasks) => [newTask, ...currentTasks])
+    setTaskTitle('')
+  }
+
+  const handleToggleTask = (taskId: string) => {
+    setTasks((currentTasks) => 
+      currentTasks.map((task) => 
+        task.id === taskId ? {...task, completed: !task.completed } : task
+      )
+    )
   }
 
   return (
@@ -58,8 +113,15 @@ function App() {
           <div className='session-form'>
             <label className='field'>
               <span>Nombre de la sesión</span>
-              <input type='text' placeholder='Ej. Leer libro'></input>
+              <input 
+                type='text' 
+                placeholder='Ej. Leer libro'
+                value={sessionName}
+                onChange={(event) => setSessionName(event.target.value)}
+              />
             </label>
+
+            <p className='session-preview'>Sesión actual: {sessionName}</p>
 
             <label className='field'>
               <span>Actividad</span>
@@ -97,47 +159,44 @@ function App() {
               <h2>Tareas</h2>
             </div>
 
-            <form className='task-form'>
-              <input type='text' placeholder='Nueva tarea...'></input>
+            <form className='task-form' onSubmit={handleAddTask}>
+              <input 
+                type='text' 
+                placeholder='Nueva tarea...'
+                value={taskTitle}
+                onChange={(event) => setTaskTitle(event.target.value)}
+              />
               <button type='submit'>Añadir</button>
             </form>
 
             <ul className='task-list'>
-              <li className='task-item'>
-                <input type='checkbox'></input>
-                <span className='task-title'>Leer capítulo 4 de Matemáticas</span>
-                <span className='task-status task-status-pending'>Pendiente</span>
-                <button type='button' className='task-menu'>
-                  ⋮
-                </button>
-              </li>
+              {tasks.length === 0 ? (
+                <li className="task-empty">Todavía no hay tareas creadas.</li>
+              ) : (
+                tasks.map((task) => (
+                  <li className={`task-item ? ${task.completed ? 'task-item-completed' : ''}`} key={task.id}>
+                    
+                    <input 
+                      type='checkbox'
+                      checked={task.completed}
+                      onChange={() => handleToggleTask(task.id)}
+                    />
 
-              <li className="task-item">
-                <input type="checkbox" />
-                <span className="task-title">Resumir apuntes de Biología</span>
-                <span className="task-status task-status-pending">Pendiente</span>
-                <button type="button" className="task-menu">
-                  ⋮
-                </button>
-              </li>
+                    <span className='task-title'>{task.title}</span>
 
-              <li className="task-item task-item-completed">
-                <input type="checkbox" defaultChecked />
-                <span className="task-title">Repasar ejercicios de Física</span>
-                <span className="task-status task-status-done">Finalizada</span>
-                <button type="button" className="task-menu">
-                  ⋮
-                </button>
-              </li>
+                    <span 
+                    className={`task-status ${
+                      task.completed ? 'task-status-done' : 'task-status-pending'
+                      }`}>
+                      {task.completed ? 'Finalizada' : 'Pendiente'}
+                    </span>
 
-              <li className="task-item task-item-completed">
-                <input type="checkbox" defaultChecked />
-                <span className="task-title">Ver vídeo de Historia</span>
-                <span className="task-status task-status-done">Finalizada</span>
-                <button type="button" className="task-menu">
-                  ⋮
-                </button>
-              </li>
+                    <button type='button' className='task-menu'>
+                      ⋮
+                    </button>
+                  </li>
+                ))
+              )}
             </ul>
           </section>
 
@@ -153,33 +212,18 @@ function App() {
             </div>
 
             <ul className="history-list">
-              <li className="history-item">
-                <span className="history-dot"></span>
-                <span className="history-name">Leer libro</span>
-                <span className="history-duration">25:00</span>
-                <span className="history-date">24/05/2025</span>
-              </li>
-
-              <li className="history-item">
-                <span className="history-dot"></span>
-                <span className="history-name">Resumir apuntes</span>
-                <span className="history-duration">50:00</span>
-                <span className="history-date">24/05/2025</span>
-              </li>
-
-              <li className="history-item">
-                <span className="history-dot"></span>
-                <span className="history-name">Sesión de estudio</span>
-                <span className="history-duration">25:00</span>
-                <span className="history-date">23/05/2025</span>
-              </li>
-
-              <li className="history-item">
-                <span className="history-dot"></span>
-                <span className="history-name">Resolver ejercicios</span>
-                <span className="history-duration">40:00</span>
-                <span className="history-date">23/05/2025</span>
-              </li>
+              {sessions.length === 0 ? (
+                <li className='history-empty'>Todavía no hay sesiones guardadas.</li>
+              ) : (
+                  sessions.map((session) => (
+                    <li className="history-item" key={session.id}>
+                      <span className="history-dot"></span>
+                      <span className="history-name">{session.name}</span>
+                      <span className="history-duration">{formatTime(session.durationSeconds)}</span>
+                      <span className="history-date">{session.date}</span>
+                    </li>
+                  ))
+              )}
             </ul>
           </section>
         </section>
