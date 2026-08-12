@@ -1,21 +1,10 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-
-type StudySession = {
-  id: string
-  name: string
-  durationSeconds: number
-  date: string
-}
-
-type Task = {
-  id: string
-  title: string
-  completed: boolean
-}
+import type { StudySession, Task } from './types'
+import { Header } from './components/Header'
 
 function App() {
-  const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  const [elapsedSeconds, setElapsedSeconds] = useState(0) 
   const [isRunning, setIsRunning] = useState(false)
   const [sessionName, setSessionName] = useState('')
   const [sessions, setSessions] = useState<StudySession[]>([])
@@ -133,16 +122,7 @@ function App() {
 
   return (
     <div className='app'>
-      <header className='app-header'>
-        <div>
-          <p className='app-logo'>FocusDesk</p>
-          <h1>Tu espacio para estudiar</h1>
-        </div>
-
-        <button type='button' className='break-button'>
-          Tomar descanso
-        </button>
-      </header>
+      <Header />
 
       <main className='app-content'>
         <section className='timer-card'>
