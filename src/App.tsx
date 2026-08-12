@@ -5,41 +5,24 @@ import { Header } from './components/Header'
 import { TimerCard } from './components/TimerCard'
 import { TasksCard } from './components/TasksCard'
 import { HistoryCard } from './components/HistoryCard'
+import { Footer } from './components/Footer'
+import { formatTime } from './utils/time'
+import { useTimer } from './hooks/useTimer'
 
 function App() {
-  const [elapsedSeconds, setElapsedSeconds] = useState(0) 
-  const [isRunning, setIsRunning] = useState(false)
+  const {
+    elapsedSeconds,
+    isRunning,
+    startTimer,
+    stopTimer,
+    resetTimer
+  } = useTimer()
+
   const [sessionName, setSessionName] = useState('')
   const [sessions, setSessions] = useState<StudySession[]>([])
   const [taskTitle, setTaskTitle] = useState('')
   const [tasks, setTasks] = useState<Task[]>([])
   const [isStorageLoaded, setIsStorageLoaded] = useState(false)
-
-  const formatTime = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600)
-    const minutes = Math.floor((totalSeconds % 3600) / 60)
-    const seconds = totalSeconds % 60
-
-    return [hours, minutes, seconds]
-    .map((value) => String(value).padStart(2, '0'))
-    .join(':')
-  }
-
-  useEffect(() => {
-    if(!isRunning){
-      return
-    }
-
-    //Crea intervalo que se ejecuta cada segundo, coge valor actual y le suma 1
-    const intervalId = window.setInterval(() => {
-      setElapsedSeconds((currentSeconds) => currentSeconds + 1)
-    }, 1000)
-
-    //Limpiar intervalo cuándo no haga falta
-    return () => {
-      window.clearInterval(intervalId)
-    }
-  }, [isRunning])
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -71,7 +54,7 @@ function App() {
   }, [sessions, isStorageLoaded])
 
   const handleStartTimer = () => {
-    setIsRunning(true)
+    startTimer()
   }
 
   const handleStopTimer = () => {
@@ -87,8 +70,8 @@ function App() {
     }
 
     setSessions((currentSessions) => [newSession, ...currentSessions])
-    setIsRunning(false)
-    setElapsedSeconds(0)
+    stopTimer
+    resetTimer
     setSessionName('')
   }
 
@@ -153,9 +136,7 @@ function App() {
         </section>
       </main>
 
-      <footer className='app-footer'>
-        <span>Tiempo total hoy: </span>
-      </footer>
+      <Footer />
     </div>
   )
 }
