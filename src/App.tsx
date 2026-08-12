@@ -3,6 +3,7 @@ import './App.css'
 import type { StudySession, Task } from './types'
 import { Header } from './components/Header'
 import { TimerCard } from './components/TimerCard'
+import { TasksCard } from './components/TasksCard'
 
 function App() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0) 
@@ -137,57 +138,14 @@ function App() {
         />
 
         <section className='side-content'>
-          <section className='tasks-card'>
-            <div className='card-title'>
-              <span className='card-icon'>☷</span>
-              <h2>Tareas</h2>
-            </div>
-
-            <form className='task-form' onSubmit={handleAddTask}>
-              <input 
-                type='text' 
-                placeholder='Nueva tarea...'
-                value={taskTitle}
-                onChange={(event) => setTaskTitle(event.target.value)}
-              />
-              <button type='submit'>Añadir</button>
-            </form>
-
-            <ul className='task-list'>
-              {tasks.length === 0 ? (
-                <li className="task-empty">Todavía no hay tareas creadas.</li>
-              ) : (
-                tasks.map((task) => (
-                  <li className={`task-item ? ${task.completed ? 'task-item-completed' : ''}`} key={task.id}>
-                    
-                    <input 
-                      type='checkbox'
-                      checked={task.completed}
-                      onChange={() => handleToggleTask(task.id)}
-                    />
-
-                    <span className='task-title'>{task.title}</span>
-
-                    <span 
-                    className={`task-status ${
-                      task.completed ? 'task-status-done' : 'task-status-pending'
-                      }`}>
-                      {task.completed ? 'Finalizada' : 'Pendiente'}
-                    </span>
-
-                    <button 
-                      type='button' 
-                      className='task-menu'
-                      onClick={() => handleDeleteTask(task.id)}
-                      aria-label={`Eliminar tarea ${task.title}`}
-                      >
-                      x
-                    </button>
-                  </li>
-                ))
-              )}
-            </ul>
-          </section>
+          <TasksCard 
+            tasks={tasks}
+            taskTitle={taskTitle}
+            onTaskTitleChange={setTaskTitle}
+            onAddTask={handleAddTask}
+            onToggleTask={handleToggleTask}
+            onDeleteTask={handleDeleteTask}
+          />
 
           <section className='history-card'>
             <div className='history-header'>
