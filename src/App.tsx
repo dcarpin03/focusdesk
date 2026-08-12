@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import type { StudySession, Task } from './types'
 import { Header } from './components/Header'
+import { TimerCard } from './components/TimerCard'
 
 function App() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0) 
@@ -125,48 +126,15 @@ function App() {
       <Header />
 
       <main className='app-content'>
-        <section className='timer-card'>
-          <div className='session-form'>
-            <label className='field'>
-              <span>Nombre de la sesión</span>
-              <input 
-                type='text' 
-                placeholder='Ej. Leer libro'
-                value={sessionName}
-                onChange={(event) => setSessionName(event.target.value)}
-              />
-            </label>
-
-            <p className='session-preview'>Sesión actual: {sessionName}</p>
-
-            <label className='field'>
-              <span>Actividad</span>
-              <select defaultValue="lectura">
-                <option value="lectura">Lectura</option>
-                <option value="matematicas">Matemáticas</option>
-                <option value="historia">Historia</option>
-                <option value="programacion">Programación</option>
-              </select>
-            </label>
-          </div>
-
-          <div className='timer-display'>
-            <div className='timer-circle'>
-              <p className='timer-time'>{formatTime(elapsedSeconds)}</p>
-              <p className='timer-label'>Tiempo de estudio</p>
-            </div>
-          </div>
-
-          <div className='timer-actions'>
-            <button type='button' className='primary-button' onClick={handleStartTimer}>
-              {isRunning ? '▶ En curso' : '▶ Iniciar'}
-            </button>
-
-            <button type='button' className='secondary-button' onClick={handleStopTimer}>
-              ■ Detener
-            </button>
-          </div>
-        </section>
+        <TimerCard 
+            sessionName={sessionName}
+            elapsedSeconds={elapsedSeconds}
+            isRunning={isRunning}
+            onSessionNameChange={setSessionName}
+            onStart={handleStartTimer}
+            onStop={handleStopTimer}
+            formatTime={formatTime}
+        />
 
         <section className='side-content'>
           <section className='tasks-card'>
