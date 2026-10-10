@@ -58,7 +58,7 @@ function App() {
   }
 
   const handleStopTimer = () => {
-    if(elapsedSeconds === 0){
+    if(!isRunning || elapsedSeconds === 0){
       return
     }
 

@@ -32,15 +32,6 @@ export function TimerCard({
 
             <p className='session-preview'>Sesión actual: {sessionName}</p>
 
-            <label className='field'>
-              <span>Actividad</span>
-              <select defaultValue="lectura">
-                <option value="lectura">Lectura</option>
-                <option value="matematicas">Matemáticas</option>
-                <option value="historia">Historia</option>
-                <option value="programacion">Programación</option>
-              </select>
-            </label>
           </div>
 
           <div className='timer-display'>
@@ -51,11 +42,11 @@ export function TimerCard({
           </div>
 
           <div className='timer-actions'>
-            <button type='button' className='primary-button' onClick={onStart}>
+            <button type='button' className='primary-button' onClick={onStart} disabled={isRunning}>
               {isRunning ? '▶ En curso' : '▶ Iniciar'}
             </button>
 
-            <button type='button' className='secondary-button' onClick={onStop}>
+            <button type='button' className='secondary-button' onClick={onStop} disabled={!isRunning}>
               ■ Detener
             </button>
           </div>
