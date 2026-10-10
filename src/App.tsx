@@ -70,8 +70,8 @@ function App() {
     }
 
     setSessions((currentSessions) => [newSession, ...currentSessions])
-    stopTimer
-    resetTimer
+    stopTimer()
+    resetTimer()
     setSessionName('')
   }
 
