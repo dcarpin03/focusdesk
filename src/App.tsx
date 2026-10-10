@@ -106,6 +106,11 @@ function App() {
     )
   }
 
+  const today = new Date().toLocaleDateString('es-ES')
+  const totalTodaySeconds = sessions
+  .filter((session) => session.date === today)
+  .reduce((total, session) => total + session.durationSeconds, 0)
+
   return (
     <div className='app'>
       <Header />
@@ -136,7 +141,7 @@ function App() {
         </section>
       </main>
 
-      <Footer />
+      <Footer totalTodaySeconds={totalTodaySeconds}/>
     </div>
   )
 }

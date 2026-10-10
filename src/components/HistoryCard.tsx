@@ -12,10 +12,6 @@ export function HistoryCard({ sessions, formatTime }: HistoryCardProps) {
               <div className='card-title'>
                 <h2>Historial de sesiones</h2>
               </div>
-
-              <button type='button' className='history-link'>
-                Ver todo
-              </button>
             </div>
 
             <ul className="history-list">
