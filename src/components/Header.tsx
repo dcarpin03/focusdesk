@@ -5,10 +5,6 @@ export function Header() {
           <p className='app-logo'>FocusDesk</p>
           <h1>Tu espacio para estudiar</h1>
         </div>
-
-        <button type='button' className='break-button'>
-          Tomar descanso
-        </button>
       </header>
     )
 }

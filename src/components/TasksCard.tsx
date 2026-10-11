@@ -39,7 +39,10 @@ export function TasksCard({
                 <li className="task-empty">Todavía no hay tareas creadas.</li>
               ) : (
                 tasks.map((task) => (
-                  <li className={`task-item ? ${task.completed ? 'task-item-completed' : ''}`} key={task.id}>
+                  <li 
+                    className={`task-item ${task.completed ? 'task-item-completed' : ''}`} 
+                    key={task.id}
+                  >
                     
                     <input 
                       type='checkbox'
