@@ -57,16 +57,18 @@
 
 .app-footer {
   display: flex;
+  align-items: center;
   gap: 32px;
-  margin-top: 24px;
-  padding-top: 20px;
+  margin-top: 16px;
+  padding-top: 8px;
+  flex-shrink: 0;
   color: #756b62;
 }
 
 .session-form {
   display: grid;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .field {
@@ -100,13 +102,13 @@
 .timer-display {
   display: flex;
   justify-content: center;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .timer-circle {
-  width: min(360px, 100%);
+  width: min(300px, 100%);
   aspect-ratio: 1;
-  border: 10px solid #f1e5d8;
+  border: 8px solid #f1e5d8;
   border-left-color: #c87943;
   border-bottom-color: #c87943;
   border-radius: 50%;
@@ -119,7 +121,7 @@
 .timer-time {
    margin: 0;
   color: #2f261f;
-  font-size: clamp(3rem, 6vw, 4.8rem);
+  font-size: clamp(2.5rem, 4vw, 4rem);
   font-weight: 600;
   letter-spacing: -0.06em;
   line-height: 1;
@@ -312,6 +314,19 @@
   min-width: 0;
 }
 
+.timer-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.history-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .history-header {
   display: flex;
   justify-content: space-between;
@@ -408,15 +423,6 @@
   .tasks-card,
   .history-card {
     padding: 18px;
-    display: grid;
-    align-content: start;
-    margin: 0;
-    padding: 0 8px 0 0;
-    list-style: none;
-
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
   }
 
   .timer-circle {
@@ -441,5 +447,26 @@
   .history-item {
     gap: 8px;
     font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 950px), (max-height: 700px) {
+  .app {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  .app-content {
+    flex: none;
+  }
+
+  .history-card {
+    overflow: visible;
+  }
+
+  .history-list {
+    flex: none;
+    max-height: 320px;
   }
 }
