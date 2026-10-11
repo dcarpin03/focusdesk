@@ -1,16 +1,19 @@
 .app {
-  min-height: 100vh;
-  padding: 32px;
+  height: 100vh;
+  padding: 24px;
   background: #f7f2ec;
   color: #2f261f;
-  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .app-logo {
@@ -26,20 +29,13 @@
   font-weight: 400;
 }
 
-.break-button {
-  border: 1px solid #e0d4c7;
-  border-radius: 12px;
-  padding: 12px 18px;
-  background: #fffaf5;
-  color: #2f261f;
-  font: inherit;
-  cursor: pointer;
-}
-
 .app-content {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  gap: 24px;
+  gap: 20px;
+
+  flex: 1;
+  min-height: 0;
 }
 
 .timer-card,
@@ -54,7 +50,9 @@
 
 .side-content {
   display: grid;
-  gap: 24px;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 20px;
+  min-height: 0;
 }
 
 .app-footer {
@@ -322,21 +320,18 @@
   margin-bottom: 18px;
 }
 
-.history-link {
-  border: 0;
-  background: transparent;
-  color: #c87943;
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
 .history-list {
   display: grid;
+  align-content: start;
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 0;
   list-style: none;
+
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
 }
+
 
 .history-item {
   display: grid;
@@ -391,4 +386,60 @@
   padding: 18px 0;
   color: #756b62;
   list-style: none;
+}
+
+
+@media (max-width: 950px) {
+  .app-content {
+    grid-template-columns: 1fr;
+  }
+
+  .timer-circle {
+    width: min(320px, 100%);
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    padding: 16px;
+  }
+
+  .timer-card,
+  .tasks-card,
+  .history-card {
+    padding: 18px;
+    display: grid;
+    align-content: start;
+    margin: 0;
+    padding: 0 8px 0 0;
+    list-style: none;
+
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .timer-circle {
+    width: min(280px, 100%);
+  }
+
+  .timer-time {
+    font-size: clamp(2.2rem, 8vw, 3.5rem);
+  }
+
+  .timer-actions {
+    gap: 10px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    min-width: 0;
+    flex: 1;
+    padding: 14px;
+  }
+
+  .history-item {
+    gap: 8px;
+    font-size: 0.85rem;
+  }
 }
