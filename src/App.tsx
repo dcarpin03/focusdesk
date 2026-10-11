@@ -26,12 +26,17 @@ function App() {
 
   useEffect(() => {
     const loadStoredData = async () => {
-      const storedTasks = await window.focusDeskStorage.getTasks()
-      const storedSessions = await window.focusDeskStorage.getSessions()
+      try {
+        const storedTasks = await window.focusDeskStorage.getTasks()
+        const storedSessions = await window.focusDeskStorage.getSessions()
 
-      setTasks(storedTasks)
-      setSessions(storedSessions)
-      setIsStorageLoaded(true)
+        setTasks(storedTasks)
+        setSessions(storedSessions)
+        setIsStorageLoaded(true)
+      } catch(error) {
+        console.error('Error al cargar los datos de FocusDesk:', error)
+      }
+      
     }
 
     loadStoredData()
@@ -42,7 +47,9 @@ function App() {
       return
     }
 
-    window.focusDeskStorage.setTasks(tasks)
+    window.focusDeskStorage.setTasks(tasks).catch((error) => {
+      console.error('Error al guardar las tareas:', error)
+    })
   }, [tasks, isStorageLoaded])
 
   useEffect(() => {
@@ -50,7 +57,9 @@ function App() {
       return
     }
 
-    window.focusDeskStorage.setSessions(sessions)
+    window.focusDeskStorage.setSessions(sessions).catch((error) => {
+      console.error('Error al guardar las sesiones:', error)
+    })
   }, [sessions, isStorageLoaded])
 
   const handleStartTimer = () => {
