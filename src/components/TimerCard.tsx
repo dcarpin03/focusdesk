@@ -14,8 +14,7 @@ export function TimerCard({
     isRunning,
     onSessionNameChange,
     onStart,
-    onStop,
-    formatTime
+    onStop
 }: TimerCardProps) {
     return (
         <section className='timer-card'>
@@ -30,25 +29,34 @@ export function TimerCard({
               />
             </label>
 
-            <p className='session-preview'>Sesión actual: {sessionName}</p>
+            {sessionName.trim() && (
+              <p className='session-preview'>Sesión actual: {sessionName}</p>
+            )}
 
           </div>
 
           <div className='timer-display'>
-            <div className='timer-circle'>
-              <p className='timer-time'>{formatTime(elapsedSeconds)}</p>
-              <p className='timer-label'>Tiempo de estudio</p>
+            <div className='timer-clock'>
+              <span>{String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0')}<small>h</small></span>
+              <span>{String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0')}<small>m</small></span>
+              <span className='timer-seconds'>
+                {String(elapsedSeconds % 60).padStart(2, '0')}<small>s</small>
+              </span>
             </div>
+
+            <p className='timer-label'>Tiempo de estudio</p>
           </div>
 
           <div className='timer-actions'>
-            <button type='button' className='primary-button' onClick={onStart} disabled={isRunning}>
-              {isRunning ? '▶ En curso' : '▶ Iniciar'}
-            </button>
-
-            <button type='button' className='secondary-button' onClick={onStop} disabled={!isRunning}>
-              ■ Detener
-            </button>
+            {!isRunning ? (
+              <button type='button' className='primary-button' onClick={onStart}>
+                ▶ Iniciar sesión
+              </button>
+            ) : (
+              <button type='button' className='secondary-button' onClick={onStop}>
+                ■ Finalizar sesión
+              </button>
+            )}
           </div>
         </section>
     )

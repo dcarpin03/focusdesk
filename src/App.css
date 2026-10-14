@@ -99,44 +99,53 @@
   outline-offset: 2px;
 }
 
+
 .timer-display {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
+  flex: 1;
+  gap: 18px;
+  margin-bottom: 24px;
 }
 
-.timer-circle {
-  width: min(300px, 100%);
-  aspect-ratio: 1;
-  border: 8px solid #f1e5d8;
-  border-left-color: #c87943;
-  border-bottom-color: #c87943;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  justify-self: center;
-}
-
-.timer-time {
-   margin: 0;
-  color: #2f261f;
-  font-size: clamp(2.5rem, 4vw, 4rem);
+.timer-clock {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 20px;
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
   font-weight: 600;
-  letter-spacing: -0.06em;
-  line-height: 1;
-  white-space: nowrap;
+  letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
 
+.timer-clock span {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.timer-clock small {
+  color: #8c8178;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.timer-seconds {
+  color: #c87943;
+}
+
 .timer-label {
-  margin: 12px 0 0;
+  margin: 0;
   border-radius: 999px;
   padding: 8px 18px;
   background: #f8eadf;
   color: #a95f2f;
   font-weight: 600;
 }
+
 
 .timer-actions {
   display: flex;
@@ -408,10 +417,6 @@
   .app-content {
     grid-template-columns: 1fr;
   }
-
-  .timer-circle {
-    width: min(320px, 100%);
-  }
 }
 
 @media (max-width: 600px) {
@@ -425,12 +430,9 @@
     padding: 18px;
   }
 
-  .timer-circle {
-    width: min(280px, 100%);
-  }
-
-  .timer-time {
-    font-size: clamp(2.2rem, 8vw, 3.5rem);
+  .timer-clock {
+    font-size: clamp(2rem, 7vw, 3rem);
+    gap: 10px;
   }
 
   .timer-actions {
