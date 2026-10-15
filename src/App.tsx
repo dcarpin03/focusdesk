@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import type { StudySession, Task } from './types'
-import { Header } from './components/Header'
 import { TimerCard } from './components/TimerCard'
 import { TasksCard } from './components/TasksCard'
 import { HistoryCard } from './components/HistoryCard'
@@ -122,8 +121,6 @@ function App() {
 
   return (
     <div className='app'>
-      <Header />
-
       <main className='app-content'>
         <TimerCard 
             sessionName={sessionName}

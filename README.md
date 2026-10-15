@@ -48,7 +48,6 @@ FocusDesk utiliza una arquitectura que separa la interfaz gráfica, la lógica d
 
 La interfaz está dividida en componentes reutilizables:
 
-- `Header`: cabecera de la aplicación.
 - `TimerCard`: interfaz del cronómetro.
 - `TasksCard`: gestión visual de las tareas.
 - `HistoryCard`: historial de sesiones.
