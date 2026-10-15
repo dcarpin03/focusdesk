@@ -79,6 +79,17 @@
   outline-offset: 2px;
 }
 
+.field input:read-only {
+  background: #f9f1e8;
+  color: #756b62;
+}
+
+.session-hint {
+  margin: 0;
+  color: #756b62;
+  font-size: 0.9rem;
+}
+
 
 .timer-display {
   display: flex;

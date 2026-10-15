@@ -18,6 +18,7 @@ function App() {
   } = useTimer()
 
   const [sessionName, setSessionName] = useState('')
+  const [activeSessionName, setActiveSessionName] = useState('')
   const [sessions, setSessions] = useState<StudySession[]>([])
   const [taskTitle, setTaskTitle] = useState('')
   const [tasks, setTasks] = useState<Task[]>([])
@@ -62,6 +63,14 @@ function App() {
   }, [sessions, isStorageLoaded])
 
   const handleStartTimer = () => {
+    const trimmedName = sessionName.trim()
+
+    if (isRunning || !trimmedName) {
+      return
+    }
+
+    setSessionName(trimmedName)
+    setActiveSessionName(trimmedName)
     startTimer()
   }
 
@@ -72,7 +81,7 @@ function App() {
 
     const newSession: StudySession = {
       id: crypto.randomUUID(),
-      name: sessionName.trim() || 'Sesión sin nombre',
+      name: activeSessionName,
       durationSeconds: elapsedSeconds,
       date: new Date().toLocaleDateString('es-ES')
     }
@@ -81,6 +90,7 @@ function App() {
     stopTimer()
     resetTimer()
     setSessionName('')
+    setActiveSessionName('')
   }
 
   const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {

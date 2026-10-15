@@ -20,14 +20,23 @@ export function TimerCard({
         <section className='timer-card'>
           <div className='session-form'>
             <label className='field'>
-              <span>Nombre de la sesión</span>
+              <span>Nombre de la sesión (obligatorio)</span>
               <input 
                 type='text' 
                 placeholder='Ej. Leer libro'
                 value={sessionName}
+                required
+                readOnly={isRunning}
+                aria-describedby='session-name-hint'
                 onChange={(event) => onSessionNameChange(event.target.value)}
               />
             </label>
+
+            <p className='session-hint' id='session-name-hint'>
+              {isRunning
+                ? 'Podrás editar el nombre al finalizar la sesión.'
+                : 'Introduce un nombre para iniciar la sesión.'}
+            </p>
 
             {sessionName.trim() && (
               <p className='session-preview'>Sesión actual: {sessionName}</p>
@@ -49,7 +58,7 @@ export function TimerCard({
 
           <div className='timer-actions'>
             {!isRunning ? (
-              <button type='button' className='primary-button' onClick={onStart}>
+              <button type='button' className='primary-button' onClick={onStart} disabled={!sessionName.trim()}>
                 ▶ Iniciar sesión
               </button>
             ) : (
