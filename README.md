@@ -35,6 +35,13 @@ La aplicación funciona localmente y utiliza almacenamiento persistente, sin nec
 - Conservar las sesiones antiguas en el grupo «Sin sección».
 - Mantener el historial mediante almacenamiento local.
 
+### Apariencia
+
+- Abrir ajustes desde el engranaje de la parte superior derecha.
+- Elegir entre Clásico, Oscuro, Azul y Verde con una vista previa de sus colores.
+- Aplicar el tema al instante y conservarlo al reiniciar.
+- Mantener los colores personalizados de las secciones en todos los temas.
+
 ## Tecnologías utilizadas
 
 | Tecnología | Utilización |
@@ -59,10 +66,13 @@ La interfaz está dividida en componentes reutilizables:
 - `TasksCard`: gestión visual de las tareas.
 - `HistoryCard`: historial de sesiones.
 - `Footer`: pie de la aplicación.
+- `SettingsPanel`: ajustes de apariencia accesibles con ratón y teclado.
 
 La lógica del temporizador se encuentra encapsulada en el hook personalizado `useTimer`, que gestiona el tiempo transcurrido y las operaciones de inicio, parada y reinicio.
 
 El componente `App.tsx` coordina el estado general y la comunicación entre los distintos componentes.
+
+Los temas se definen mediante variables semánticas en `src/themes.css` y el atributo `data-theme` del documento. Las mismas clases CSS se reutilizan en los cuatro temas.
 
 ### Persistencia de datos
 
@@ -71,6 +81,8 @@ La aplicación utiliza `electron-store` para almacenar las tareas, sesiones y se
 Cada sesión nueva conserva el identificador de la sección seleccionada al iniciarla. Las sesiones anteriores, sin ese identificador, siguen disponibles en «Sin sección» sin necesidad de migrarlas. Electron comprueba que una sección no contiene sesiones antes de permitir su eliminación; esta operación nunca elimina sesiones.
 
 Las secciones creadas antes de incorporar los colores reciben el azul predeterminado al cargarse. Esta actualización conserva sus identificadores, nombres y sesiones asociadas.
+
+La preferencia de apariencia se guarda en la clave `theme` de `electron-store` mediante operaciones IPC limitadas a leer y guardar un tema válido. Se carga antes de montar React, sin sobrescribirla durante la inicialización. Si no existe o contiene un valor desconocido, se utiliza Clásico.
 
 La comunicación entre React y el proceso principal de Electron se realiza mediante IPC (*Inter-Process Communication*).
 

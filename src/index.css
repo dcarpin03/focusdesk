@@ -19,5 +19,6 @@ body,
 }
 
 body {
-  background: #f7f2ec;
+  color: var(--color-text);
+  background: var(--color-background);
 }

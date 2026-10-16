@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import type { StudySection, StudySession, Task } from './types'
+import type { StudySection, StudySession, Task, Theme } from './types'
+import { SettingsPanel } from './components/SettingsPanel'
 import { TimerCard } from './components/TimerCard'
 import { SectionForm } from './components/SectionForm'
 import { TasksCard } from './components/TasksCard'
@@ -9,7 +10,22 @@ import { Footer } from './components/Footer'
 import { formatTime } from './utils/time'
 import { useTimer } from './hooks/useTimer'
 
-function App() {
+function App({ initialTheme }: { initialTheme: Theme }) {
+  const [theme, setTheme] = useState<Theme>(initialTheme)
+  const [themeError, setThemeError] = useState('')
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+  }, [theme])
+
+  const handleThemeChange = (nextTheme: Theme) => {
+    setTheme(nextTheme)
+    setThemeError('')
+    window.focusDeskStorage.setTheme(nextTheme).catch(() => {
+      setThemeError('No se pudo guardar el tema. Se aplicará solo durante esta ejecución.')
+    })
+  }
+
   const {
     elapsedSeconds,
     isRunning,
@@ -189,11 +205,14 @@ function App() {
 
   return (
     <div className='app'>
-      <SectionForm
-        sections={sections}
-        disabled={isRunning || isSectionPending || !isStorageLoaded}
-        onAddSection={handleAddSection}
-      />
+      <div className='app-toolbar'>
+        <SectionForm
+          sections={sections}
+          disabled={isRunning || isSectionPending || !isStorageLoaded}
+          onAddSection={handleAddSection}
+        />
+        <SettingsPanel theme={theme} onThemeChange={handleThemeChange} error={themeError} />
+      </div>
       <main className='app-content'>
         <TimerCard 
             sections={sections}

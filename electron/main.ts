@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
-import { getSections, store } from './store'
+import { getSections, getTheme, store } from './store'
+import { isTheme } from '../src/utils/themes'
 import { isSectionColor } from '../src/utils/sectionColors'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
@@ -26,6 +27,15 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
 let win: BrowserWindow | null
+
+ipcMain.handle('settings:get-theme', () => getTheme())
+
+ipcMain.handle('settings:set-theme', (_event, theme: unknown) => {
+  if (!isTheme(theme)) {
+    throw new Error('El tema seleccionado no es válido.')
+  }
+  store.set('theme', theme)
+})
 
 ipcMain.handle('storage:get-tasks', () => {
   return store.get('tasks')

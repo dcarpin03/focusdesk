@@ -1,3 +1,5 @@
+export type Theme = 'classic' | 'dark' | 'blue' | 'green'
+
 export type StudySession = {
   id: string
   name: string
