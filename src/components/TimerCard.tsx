@@ -1,67 +1,25 @@
-import type { StudySection } from '../types'
-import { SectionPicker } from './SectionPicker'
+import type { ReactNode } from 'react'
 
 type TimerCardProps = {
-    sections: StudySection[]
-    selectedSectionId: string
-    onSectionChange: (sectionId: string) => void
-    isSectionPending: boolean
-    sessionName: string
     elapsedSeconds: number
     isRunning: boolean
-    onSessionNameChange: (value: string) => void
+    canStart: boolean
     onStart: () => void
     onStop: () => void
-    formatTime: (seconds: number) => string
+    sessionForm?: ReactNode
 }
 
 export function TimerCard({
-    sections,
-    selectedSectionId,
-    onSectionChange,
-    isSectionPending,
-    sessionName,
     elapsedSeconds,
     isRunning,
-    onSessionNameChange,
+    canStart,
     onStart,
-    onStop
+    onStop,
+    sessionForm
 }: TimerCardProps) {
     return (
         <section className='timer-card'>
-          <div className='session-form'>
-            <div className='session-fields'>
-              <label className='field'>
-                <span>Nombre de la sesión (obligatorio)</span>
-                <input
-                  type='text'
-                  placeholder='Ej. Leer libro'
-                  value={sessionName}
-                  required
-                  readOnly={isRunning}
-                  aria-describedby='session-name-hint'
-                  onChange={(event) => onSessionNameChange(event.target.value)}
-                />
-              </label>
-              <SectionPicker
-                sections={sections}
-                selectedSectionId={selectedSectionId}
-                disabled={isRunning || isSectionPending}
-                onSectionChange={onSectionChange}
-              />
-            </div>
-
-            <p className='session-hint' id='session-name-hint'>
-              {isRunning
-                ? 'Podrás editar el nombre al finalizar la sesión.'
-                : 'Introduce un nombre para iniciar la sesión.'}
-            </p>
-
-            {sessionName.trim() && (
-              <p className='session-preview'>Sesión actual: {sessionName}</p>
-            )}
-
-          </div>
+          {sessionForm}
 
           <div className='timer-display'>
             <div className='timer-clock'>
@@ -77,7 +35,7 @@ export function TimerCard({
 
           <div className='timer-actions'>
             {!isRunning ? (
-              <button type='button' className='primary-button' onClick={onStart} disabled={!sessionName.trim() || !selectedSectionId || isSectionPending}>
+              <button type='button' className='primary-button' onClick={onStart} disabled={!canStart}>
                 ▶ Iniciar sesión
               </button>
             ) : (

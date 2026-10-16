@@ -61,6 +61,7 @@ FocusDesk utiliza una arquitectura que separa la interfaz gráfica, la lógica d
 La interfaz está dividida en componentes reutilizables:
 
 - `TimerCard`: interfaz del cronómetro.
+- `SessionForm`: nombre obligatorio y selección de sección, reutilizable dentro o fuera de la tarjeta del cronómetro.
 - `SectionForm`: creación de secciones con nombre y color.
 - `SectionPicker`: selección de la sección de una sesión.
 - `TasksCard`: gestión visual de las tareas.
@@ -70,7 +71,21 @@ La interfaz está dividida en componentes reutilizables:
 
 La lógica del temporizador se encuentra encapsulada en el hook personalizado `useTimer`, que gestiona el tiempo transcurrido y las operaciones de inicio, parada y reinicio.
 
-El componente `App.tsx` coordina el estado general y la comunicación entre los distintos componentes.
+`useFocusDesk` mantiene una única instancia del estado de sesiones, secciones, tareas y tema, junto con sus acciones, persistencia y cálculo del tiempo diario. Reutiliza `useTimer` sin modificar su funcionamiento. `App.tsx` crea ese modelo una sola vez y se lo pasa al layout seleccionado mediante props.
+
+### Diseños visuales
+
+`src/layouts/types.ts` define los seis identificadores de diseño y el contrato `LayoutProps`. `src/layouts/layoutConfig.ts` centraliza sus nombres y resuelve el componente correspondiente. El identificador interno predeterminado es `editorial`, pero los seis diseños están pendientes: todos utilizan `CurrentLayout` como respaldo, que conserva la distribución, el HTML y las clases actuales. No hay selector ni preferencia de diseño almacenada todavía.
+
+Los layouts organizan la presentación y reciben el mismo modelo; no deben crear otra instancia de `useFocusDesk`, leer directamente el almacenamiento ni duplicar acciones de negocio. Los estados locales de presentación, como los grupos abiertos del historial o la apertura de ajustes, pueden seguir en sus componentes. Si un futuro selector desmonta esos componentes, dichos estados locales se reiniciarán; los datos de estudio y el cronómetro permanecerán en `App` a través del hook compartido.
+
+Para incorporar Editorial en el siguiente bloque:
+
+1. Crear un componente que reciba `LayoutProps` y registrar su `component` en la entrada `editorial` de `LAYOUTS`.
+2. Reorganizar `SectionForm`, `SessionForm`, `TimerCard`, `TasksCard`, `HistoryCard`, `SettingsPanel` y `Footer` utilizando los datos y acciones de `model`. `TimerCard` acepta un `sessionForm` opcional: Editorial podrá mostrar `SessionForm` en otra zona sin duplicar su validación ni su estado.
+3. Para una presentación específica, como el cronómetro circular, consumir `elapsedSeconds`, `isRunning`, `canStartSession`, `handleStartTimer` y `handleStopTimer` del mismo modelo. Las tarjetas y controles actuales pueden reutilizarse o recibir una presentación específica sin trasladar las operaciones de negocio al layout.
+
+Los temas y diseños son independientes: `data-theme` y `src/themes.css` siguen controlando la paleta. Este bloque no modifica estilos, IPC, estructuras de almacenamiento ni preferencias existentes. Las clases de `App.css` son globales y describen la presentación actual; los futuros estilos de estructura deberán quedar limitados a una clase raíz propia del layout para evitar interferencias, manteniendo las variables semánticas de color. No se han detectado incompatibilidades que requieran cambiar los temas actuales.
 
 Los temas se definen mediante variables semánticas en `src/themes.css` y el atributo `data-theme` del documento. Las mismas clases CSS se reutilizan en los cuatro temas.
 
