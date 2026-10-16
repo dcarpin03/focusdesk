@@ -28,6 +28,8 @@ function App() {
   const [taskTitle, setTaskTitle] = useState('')
   const [tasks, setTasks] = useState<Task[]>([])
   const [isStorageLoaded, setIsStorageLoaded] = useState(false)
+  const [isTasksOpen, setIsTasksOpen] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -196,8 +198,10 @@ function App() {
             formatTime={formatTime}
         />
 
-        <section className='side-content'>
+        <section className={`side-content${isTasksOpen ? ' side-content-tasks-open' : ''}${isHistoryOpen ? ' side-content-history-open' : ''}`}>
           <TasksCard 
+            isOpen={isTasksOpen}
+            onToggle={() => setIsTasksOpen((isOpen) => !isOpen)}
             tasks={tasks}
             taskTitle={taskTitle}
             onTaskTitleChange={setTaskTitle}
@@ -207,6 +211,8 @@ function App() {
           />
 
           <HistoryCard
+            isOpen={isHistoryOpen}
+            onToggle={() => setIsHistoryOpen((isOpen) => !isOpen)}
             sessions={sessions}
             sections={sections}
             activeSectionId={isRunning ? activeSectionId : ''}

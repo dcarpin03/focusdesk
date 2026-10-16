@@ -3,6 +3,8 @@ import type { StudySection, StudySession } from '../types'
 import { DEFAULT_SECTION_COLOR } from '../utils/sectionColors'
 
 type HistoryCardProps = {
+  isOpen: boolean
+  onToggle: () => void
   sessions: StudySession[]
   sections: StudySection[]
   activeSectionId: string
@@ -11,7 +13,7 @@ type HistoryCardProps = {
   formatTime: (seconds: number) => string
 }
 
-export function HistoryCard({ sessions, sections, activeSectionId, isSectionPending, onDeleteSection, formatTime }: HistoryCardProps) {
+export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectionId, isSectionPending, onDeleteSection, formatTime }: HistoryCardProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set(['unassigned']))
   const [error, setError] = useState('')
   const sectionIds = new Set(sections.map((section) => section.id))
@@ -48,59 +50,71 @@ export function HistoryCard({ sessions, sections, activeSectionId, isSectionPend
 
   return (
     <section className='history-card'>
-      <div className='history-header'>
-        <div className='card-title'><h2>Historial de sesiones</h2></div>
-      </div>
-      <p className='history-help'>Solo puedes eliminar secciones vacías.</p>
-      {error && <p className='section-error' role='alert'>{error}</p>}
-      <ul className='history-list'>
-        {groups.length === 0 ? (
-          <li className='history-empty'>Todavía no hay sesiones ni secciones guardadas.</li>
-        ) : groups.map((group) => {
-          const expanded = expandedGroups.has(group.id)
-          const isActive = activeSectionId === group.id
-          const canDelete = group.sessions.length === 0 && !isActive && !isSectionPending
-          return (
-            <li className='history-group' key={group.id}>
-              <div className='history-group-header'>
-                <button
-                  type='button'
-                  className='section-toggle'
-                  aria-expanded={expanded}
-                  aria-controls={`history-group-${group.id}`}
-                  onClick={() => toggleGroup(group.id)}
-                >
-                  <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>
-                  <span className='section-color-dot' aria-hidden='true' style={{ backgroundColor: group.color }}></span>
-                  <span className='section-name'>{group.name} ({group.sessions.length})</span>
-                </button>
-                {group.removable && (
+      <h2 className='panel-header'>
+        <button
+          type='button'
+          className='panel-toggle'
+          id='history-panel-toggle'
+          aria-expanded={isOpen}
+          aria-controls='history-panel-content'
+          onClick={onToggle}
+        >
+          <span>Historial de sesiones</span>
+          <span className='panel-arrow' aria-hidden='true'>{isOpen ? '▾' : '▸'}</span>
+        </button>
+      </h2>
+      <div className='panel-content' id='history-panel-content' hidden={!isOpen}>
+        <p className='history-help'>Solo puedes eliminar secciones vacías.</p>
+        {error && <p className='section-error' role='alert'>{error}</p>}
+        <ul className='history-list'>
+          {groups.length === 0 ? (
+            <li className='history-empty'>Todavía no hay sesiones ni secciones guardadas.</li>
+          ) : groups.map((group) => {
+            const expanded = expandedGroups.has(group.id)
+            const isActive = activeSectionId === group.id
+            const canDelete = group.sessions.length === 0 && !isActive && !isSectionPending
+            return (
+              <li className='history-group' key={group.id}>
+                <div className='history-group-header'>
                   <button
                     type='button'
-                    className='section-delete'
-                    aria-label={`Eliminar sección ${group.name}`}
-                    disabled={!canDelete}
-                    title={isActive ? 'Hay una sesión en curso en esta sección.' : group.sessions.length > 0 ? 'Esta sección contiene sesiones y no se puede eliminar.' : 'Eliminar sección vacía'}
-                    onClick={() => handleDelete(group.id)}
-                  >Eliminar sección</button>
-                )}
-              </div>
-              <ul className='section-sessions' id={`history-group-${group.id}`} hidden={!expanded}>
-                {group.sessions.length === 0 ? (
-                  <li className='history-empty'>Todavía no hay sesiones en esta sección.</li>
-                ) : group.sessions.map((session) => (
-                  <li className='history-item' key={session.id}>
-                    <span className='history-dot' aria-hidden='true'></span>
-                    <span className='history-name'>{session.name}</span>
-                    <span className='history-duration'>{formatTime(session.durationSeconds)}</span>
-                    <span className='history-date'>{session.date}</span>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          )
-        })}
-      </ul>
+                    className='section-toggle'
+                    aria-expanded={expanded}
+                    aria-controls={`history-group-${group.id}`}
+                    onClick={() => toggleGroup(group.id)}
+                  >
+                    <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>
+                    <span className='section-color-dot' aria-hidden='true' style={{ backgroundColor: group.color }}></span>
+                    <span className='section-name'>{group.name} ({group.sessions.length})</span>
+                  </button>
+                  {group.removable && (
+                    <button
+                      type='button'
+                      className='section-delete'
+                      aria-label={`Eliminar sección ${group.name}`}
+                      disabled={!canDelete}
+                      title={isActive ? 'Hay una sesión en curso en esta sección.' : group.sessions.length > 0 ? 'Esta sección contiene sesiones y no se puede eliminar.' : 'Eliminar sección vacía'}
+                      onClick={() => handleDelete(group.id)}
+                    >Eliminar sección</button>
+                  )}
+                </div>
+                <ul className='section-sessions' id={`history-group-${group.id}`} hidden={!expanded}>
+                  {group.sessions.length === 0 ? (
+                    <li className='history-empty'>Todavía no hay sesiones en esta sección.</li>
+                  ) : group.sessions.map((session) => (
+                    <li className='history-item' key={session.id}>
+                      <span className='history-dot' aria-hidden='true'></span>
+                      <span className='history-name'>{session.name}</span>
+                      <span className='history-duration'>{formatTime(session.durationSeconds)}</span>
+                      <span className='history-date'>{session.date}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
     </section>
   )
 }

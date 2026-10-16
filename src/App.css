@@ -30,9 +30,73 @@
 
 .side-content {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
   gap: 20px;
   min-height: 0;
+}
+
+.side-content-tasks-open {
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-content: stretch;
+}
+
+.side-content-history-open {
+  grid-template-rows: auto minmax(0, 1fr);
+  align-content: stretch;
+}
+
+.side-content-tasks-open.side-content-history-open {
+  grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.panel-header {
+  margin: 0;
+  flex-shrink: 0;
+  font-size: 1.35rem;
+}
+
+.panel-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.panel-toggle:hover {
+  color: #a95f2f;
+}
+
+.panel-toggle:focus-visible {
+  outline: 2px solid #d28a54;
+  outline-offset: 6px;
+}
+
+.panel-arrow {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: #a95f2f;
+}
+
+.panel-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  margin-top: 20px;
+  overflow: hidden;
+}
+
+.panel-content[hidden] {
+  display: none;
 }
 
 .app-footer {
@@ -364,18 +428,6 @@
   text-align: center;
 }
 
-.card-title {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 22px;
-}
-
-.card-title h2 {
-  margin: 0;
-  font-size: 1.35rem;
-}
-
 .card-icon {
   color: #8c8178;
   font-size: 1.4rem;
@@ -514,21 +566,7 @@
   overflow: hidden;
 }
 
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 18px;
-}
-
-.history-header .card-title {
-  margin-bottom: 0;
-}
-
-.tasks-card > .card-title,
-.task-form,
-.history-header {
+.task-form {
   flex-shrink: 0;
 }
 
@@ -650,8 +688,16 @@
     min-height: 360px;
   }
 
-  .side-content {
-    grid-template-rows: 360px 300px;
+  .side-content-tasks-open {
+    grid-template-rows: 360px auto;
+  }
+
+  .side-content-history-open {
+    grid-template-rows: auto 360px;
+  }
+
+  .side-content-tasks-open.side-content-history-open {
+    grid-template-rows: 360px 360px;
   }
 }
 
