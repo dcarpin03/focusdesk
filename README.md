@@ -75,17 +75,21 @@ La lógica del temporizador se encuentra encapsulada en el hook personalizado `u
 
 ### Diseños visuales
 
-`src/layouts/types.ts` define los seis identificadores de diseño y el contrato `LayoutProps`. `src/layouts/layoutConfig.ts` centraliza sus nombres y resuelve el componente correspondiente. El identificador interno predeterminado es `editorial`, pero los seis diseños están pendientes: todos utilizan `CurrentLayout` como respaldo, que conserva la distribución, el HTML y las clases actuales. No hay selector ni preferencia de diseño almacenada todavía.
+`src/layouts/types.ts` define los seis identificadores de diseño y el contrato `LayoutProps`. `src/layouts/layoutConfig.ts` centraliza sus nombres y resuelve el componente correspondiente. El diseño interno predeterminado es `editorial`, implementado en `EditorialLayout`. Los otros cinco diseños siguen pendientes y utilizan `CurrentLayout` como respaldo. No hay selector ni preferencia de diseño almacenada todavía.
 
 Los layouts organizan la presentación y reciben el mismo modelo; no deben crear otra instancia de `useFocusDesk`, leer directamente el almacenamiento ni duplicar acciones de negocio. Los estados locales de presentación, como los grupos abiertos del historial o la apertura de ajustes, pueden seguir en sus componentes. Si un futuro selector desmonta esos componentes, dichos estados locales se reiniciarán; los datos de estudio y el cronómetro permanecerán en `App` a través del hook compartido.
 
-Para incorporar Editorial en el siguiente bloque:
+Para incorporar nuevas variantes:
 
-1. Crear un componente que reciba `LayoutProps` y registrar su `component` en la entrada `editorial` de `LAYOUTS`.
-2. Reorganizar `SectionForm`, `SessionForm`, `TimerCard`, `TasksCard`, `HistoryCard`, `SettingsPanel` y `Footer` utilizando los datos y acciones de `model`. `TimerCard` acepta un `sessionForm` opcional: Editorial podrá mostrar `SessionForm` en otra zona sin duplicar su validación ni su estado.
-3. Para una presentación específica, como el cronómetro circular, consumir `elapsedSeconds`, `isRunning`, `canStartSession`, `handleStartTimer` y `handleStopTimer` del mismo modelo. Las tarjetas y controles actuales pueden reutilizarse o recibir una presentación específica sin trasladar las operaciones de negocio al layout.
+1. Crear un componente que reciba `LayoutProps` y registrar su `component` en la entrada correspondiente de `LAYOUTS`.
+2. Reorganizar los componentes existentes utilizando los datos y acciones de `model`. `TimerCard` acepta un `sessionForm` opcional y las presentaciones actual y Editorial; ambas comparten los mismos controles y acciones.
+3. Consumir `elapsedSeconds`, `isRunning`, `canStartSession`, `handleStartTimer` y `handleStopTimer` del mismo modelo para presentar el cronómetro sin duplicar su lógica.
 
-Los temas y diseños son independientes: `data-theme` y `src/themes.css` siguen controlando la paleta. Este bloque no modifica estilos, IPC, estructuras de almacenamiento ni preferencias existentes. Las clases de `App.css` son globales y describen la presentación actual; los futuros estilos de estructura deberán quedar limitados a una clase raíz propia del layout para evitar interferencias, manteniendo las variables semánticas de color. No se han detectado incompatibilidades que requieran cambiar los temas actuales.
+Los temas y diseños son independientes: `data-theme` y `src/themes.css` siguen controlando la paleta. Los estilos de Editorial se limitan a `.editorial-layout` en `EditorialLayout.css`, reutilizan las variables semánticas y no sobrescriben las preferencias. Los estilos de `App.css` continúan disponibles para la presentación anterior.
+
+Editorial incorpora una cabecera con identidad y ajustes, cronómetro circular y tarjeta de sesión sobre un fondo ambiental, resumen diario y columna de secciones, tareas e historial. El círculo muestra el tiempo ascendente real en `HH:MM:SS`; su aro completo es decorativo y no representa progreso ni un objetivo. Las tareas muestran el número real de completadas y el historial suma la duración de cada sección, sin nuevos datos almacenados.
+
+El fondo es un WebP local original generado para el proyecto (aproximadamente 110 KB), con degradado CSS de respaldo. Su procedencia y el prompt están documentados en [src/assets/editorial/README.md](src/assets/editorial/README.md). La interfaz funciona sin conexión y conserva la barra nativa de Electron. En ventanas estrechas se apila verticalmente; las listas mantienen scroll independiente. Los paneles conservan su comportamiento desplegable y su estado inicial cerrado.
 
 Los temas se definen mediante variables semánticas en `src/themes.css` y el atributo `data-theme` del documento. Las mismas clases CSS se reutilizan en los cuatro temas.
 

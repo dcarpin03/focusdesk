@@ -1,0 +1,11 @@
+# Fondo de Editorial
+
+`study-window.webp` es un recurso original generado el 16 de octubre de 2026 con la herramienta integrada de generación de imágenes de OpenAI (`imagegen`) para este proyecto. No es una fotografía de un tercero ni una extracción del mockup de referencia; no incorpora texto, marcas de agua ni elementos de interfaz. Se incluye como recurso del proyecto, sin atribuciones de terceros ni dependencias externas durante la ejecución.
+
+Procedencia y condiciones: contenido generado para FocusDesk, conforme a las condiciones aplicables a la cuenta. Los [términos europeos de OpenAI, sección Content](https://openai.com/policies/eu-terms-of-use/#content), consultados el 16 de octubre de 2026, atribuyen al usuario el Output frente a OpenAI en la medida permitida por la ley. Esta es la base para incorporar el recurso al proyecto; no se le atribuye una licencia de un banco de fotografías.
+
+El original se convirtió a WebP, calidad 82: 1122 × 1402 píxeles, 112 574 bytes. La conversión solo optimiza el formato; no cambia la composición. Vite incluye el recurso en la compilación. El degradado CSS de `.editorial-studio` permanece como respaldo si la imagen no está disponible.
+
+Prompt utilizado:
+
+> Use case: photorealistic-natural. Asset type: local decorative background image for a desktop study productivity application, no UI. Generate a high quality photographic warm study corner: a walnut desk beside a tall wooden window on the far left, soft golden late afternoon sunlight, distant tranquil alpine mountains and forest seen through the window. A small real leafy plant, a plain ivory ceramic mug with no lettering, a closed notebook and pencil sit only in the bottom-left foreground. Center and upper-right mostly airy softly defocused scenery and warm light, generous clean space for a large circular timer overlay that will be coded separately. Natural photographic materials and atmospheric depth, elegant restrained editorial lifestyle photography, warm off-white, honey, muted olive and terracotta tones. Portrait-ish 4:5 composition, suitable crop for desktop panels. No people, absolutely no text, letters, logos, watermarks, UI, circles, clocks, buttons, borders, screens, infographic, painted or cartoon style. This is an original standalone background, not a reproduction of an existing interface.

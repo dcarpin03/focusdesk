@@ -2,6 +2,7 @@ import type { StudySection } from '../types'
 import { SectionPicker } from './SectionPicker'
 
 type SessionFormProps = {
+    showPreview?: boolean
     sections: StudySection[]
     selectedSectionId: string
     onSectionChange: (sectionId: string) => void
@@ -12,6 +13,7 @@ type SessionFormProps = {
 }
 
 export function SessionForm({
+    showPreview = true,
     sections,
     selectedSectionId,
     onSectionChange,
@@ -49,7 +51,7 @@ export function SessionForm({
               : 'Introduce un nombre para iniciar la sesión.'}
           </p>
 
-          {sessionName.trim() && (
+          {showPreview && sessionName.trim() && (
             <p className='session-preview'>Sesión actual: {sessionName}</p>
           )}
 

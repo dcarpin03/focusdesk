@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import type { StudySection, StudySession } from '../types'
 import { DEFAULT_SECTION_COLOR } from '../utils/sectionColors'
+import { Icon } from './Icon'
 
 type HistoryCardProps = {
+  showSummary?: boolean
   isOpen: boolean
   onToggle: () => void
   sessions: StudySession[]
@@ -14,7 +16,7 @@ type HistoryCardProps = {
   formatTime: (seconds: number) => string
 }
 
-export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectionId, isSectionPending, onDeleteSection, onDeleteSession, formatTime }: HistoryCardProps) {
+export function HistoryCard({ showSummary = false, isOpen, onToggle, sessions, sections, activeSectionId, isSectionPending, onDeleteSection, onDeleteSession, formatTime }: HistoryCardProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set(['unassigned']))
   const [error, setError] = useState('')
   const sectionIds = new Set(sections.map((section) => section.id))
@@ -60,7 +62,9 @@ export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectio
           aria-controls='history-panel-content'
           onClick={onToggle}
         >
+          {showSummary && <span className='card-icon'><Icon name='clock' /></span>}
           <span>Historial de sesiones</span>
+          {showSummary && <span className='panel-summary'>{sessions.length} sesiones</span>}
           <span className='panel-arrow' aria-hidden='true'>{isOpen ? '▾' : '▸'}</span>
         </button>
       </h2>
@@ -87,6 +91,7 @@ export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectio
                     <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>
                     <span className='section-color-dot' aria-hidden='true' style={{ backgroundColor: group.color }}></span>
                     <span className='section-name'>{group.name} ({group.sessions.length})</span>
+                    {showSummary && <span className='section-total' title='Tiempo acumulado de la sección'>{formatTime(group.sessions.reduce((total, session) => total + session.durationSeconds, 0))}</span>}
                   </button>
                   {group.removable && (
                     <button
@@ -118,7 +123,7 @@ export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectio
                           onDeleteSession(session.id)
                         }}
                       >
-                        <span aria-hidden='true'>×</span>
+                        {showSummary ? <Icon name='trash' /> : <span aria-hidden='true'>×</span>}
                       </button>
                     </li>
                   ))}

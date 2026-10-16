@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
+import { Icon } from './Icon'
+import { formatTime } from '../utils/time'
 
 type TimerCardProps = {
+    variant?: 'default' | 'editorial'
     elapsedSeconds: number
     isRunning: boolean
     canStart: boolean
@@ -10,6 +13,7 @@ type TimerCardProps = {
 }
 
 export function TimerCard({
+    variant = 'default',
     elapsedSeconds,
     isRunning,
     canStart,
@@ -17,6 +21,36 @@ export function TimerCard({
     onStop,
     sessionForm
 }: TimerCardProps) {
+    const actions = (
+        <div className='timer-actions'>
+            {!isRunning ? (
+                <button type='button' className='primary-button' onClick={onStart} disabled={!canStart}>
+                    <span aria-hidden='true'>▶</span> Iniciar sesión
+                </button>
+            ) : (
+                <button type='button' className='secondary-button' onClick={onStop}>
+                    <span aria-hidden='true'>■</span> Finalizar sesión
+                </button>
+            )}
+        </div>
+    )
+
+    if (variant === 'editorial') {
+        return (
+            <section className='timer-card editorial-timer' aria-label='Sesión de estudio'>
+                <div className='timer-display editorial-dial'>
+                    <Icon name='leaf' />
+                    <span className='editorial-timer-state'>{isRunning ? 'Estudiando' : 'Tu próximo paso'}</span>
+                    <div className='timer-clock' role='timer' aria-label='Tiempo transcurrido' aria-live='off'>{formatTime(elapsedSeconds)}</div>
+                    <p className='timer-label'>Tiempo de estudio</p>
+                </div>
+                <div className='editorial-session-card'>
+                    {sessionForm}
+                    {actions}
+                </div>
+            </section>
+        )
+    }
     return (
         <section className='timer-card'>
           {sessionForm}
@@ -33,17 +67,7 @@ export function TimerCard({
             <p className='timer-label'>Tiempo de estudio</p>
           </div>
 
-          <div className='timer-actions'>
-            {!isRunning ? (
-              <button type='button' className='primary-button' onClick={onStart} disabled={!canStart}>
-                ▶ Iniciar sesión
-              </button>
-            ) : (
-              <button type='button' className='secondary-button' onClick={onStop}>
-                ■ Finalizar sesión
-              </button>
-            )}
-          </div>
+          {actions}
         </section>
     )
 }

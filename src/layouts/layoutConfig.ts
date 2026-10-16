@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { CurrentLayout } from './CurrentLayout'
+import { EditorialLayout } from './EditorialLayout'
 import type { LayoutId, LayoutProps } from './types'
 
 type LayoutDefinition = {
@@ -9,7 +10,7 @@ type LayoutDefinition = {
 
 // Planned designs use the existing interface until their presentation is implemented.
 export const LAYOUTS: Record<LayoutId, LayoutDefinition> = {
-  editorial: { name: 'Editorial' },
+  editorial: { name: 'Editorial', component: EditorialLayout },
   glass: { name: 'Glass' },
   minimal: { name: 'Minimalista' },
   workspace: { name: 'Workspace' },

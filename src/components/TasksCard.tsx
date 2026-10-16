@@ -1,6 +1,8 @@
 import type { Task } from "../types";
+import { Icon } from './Icon'
 
 type TasksCardProps = {
+    showSummary?: boolean
     isOpen: boolean
     onToggle: () => void
     tasks: Task[]
@@ -12,6 +14,7 @@ type TasksCardProps = {
 }
 
 export function TasksCard({
+    showSummary = false,
     isOpen,
     onToggle,
     tasks,
@@ -32,8 +35,9 @@ export function TasksCard({
                 aria-controls='tasks-panel-content'
                 onClick={onToggle}
               >
-                <span className='card-icon' aria-hidden='true'>☷</span>
+                <span className='card-icon' aria-hidden='true'>{showSummary ? <Icon name='check' /> : '☷'}</span>
                 <span>Tareas</span>
+                {showSummary && <span className='panel-summary'>{tasks.filter((task) => task.completed).length} de {tasks.length} completadas</span>}
                 <span className='panel-arrow' aria-hidden='true'>{isOpen ? '▾' : '▸'}</span>
               </button>
             </h2>
@@ -61,6 +65,7 @@ export function TasksCard({
 
                       <input
                         type='checkbox'
+                        aria-label={`Completar tarea ${task.title}`}
                         checked={task.completed}
                         onChange={() => onToggleTask(task.id)}
                       />
@@ -80,7 +85,7 @@ export function TasksCard({
                         onClick={() => onDeleteTask(task.id)}
                         aria-label={`Eliminar tarea ${task.title}`}
                         >
-                        x
+                        {showSummary ? <Icon name='trash' /> : 'x'}
                       </button>
                     </li>
                   ))
