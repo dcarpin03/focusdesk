@@ -28,6 +28,10 @@ La aplicación funciona localmente y utiliza almacenamiento persistente, sin nec
 
 - Registrar las sesiones realizadas.
 - Consultar su nombre, duración y fecha.
+- Crear secciones personalizadas y seleccionarlas antes de iniciar una sesión.
+- Expandir y contraer las secciones para consultar sus sesiones.
+- Eliminar únicamente secciones vacías y sin una sesión en curso.
+- Conservar las sesiones antiguas en el grupo «Sin sección».
 - Mantener el historial mediante almacenamiento local.
 
 ## Tecnologías utilizadas
@@ -49,6 +53,7 @@ FocusDesk utiliza una arquitectura que separa la interfaz gráfica, la lógica d
 La interfaz está dividida en componentes reutilizables:
 
 - `TimerCard`: interfaz del cronómetro.
+- `SectionPicker`: creación y selección de secciones.
 - `TasksCard`: gestión visual de las tareas.
 - `HistoryCard`: historial de sesiones.
 - `Footer`: pie de la aplicación.
@@ -59,7 +64,9 @@ El componente `App.tsx` coordina el estado general y la comunicación entre los 
 
 ### Persistencia de datos
 
-La aplicación utiliza `electron-store` para almacenar las tareas y sesiones.
+La aplicación utiliza `electron-store` para almacenar las tareas, sesiones y secciones.
+
+Cada sesión nueva conserva el identificador de la sección seleccionada al iniciarla. Las sesiones anteriores, sin ese identificador, siguen disponibles en «Sin sección» sin necesidad de migrarlas. Electron comprueba que una sección no contiene sesiones antes de permitir su eliminación; esta operación nunca elimina sesiones.
 
 La comunicación entre React y el proceso principal de Electron se realiza mediante IPC (*Inter-Process Communication*).
 

@@ -2,6 +2,9 @@ import { ipcRenderer, contextBridge } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('focusDeskStorage', {
+  getSections: () => ipcRenderer.invoke('storage:get-sections'),
+  createSection: (name: string) => ipcRenderer.invoke('storage:create-section', name),
+  deleteSection: (sectionId: string) => ipcRenderer.invoke('storage:delete-section', sectionId),
   getTasks: () => ipcRenderer.invoke('storage:get-tasks'),
   setTasks: (tasks: unknown) => 
     ipcRenderer.invoke('storage:set-tasks', tasks),

@@ -1,24 +1,17 @@
 /// <reference types="vite/client" />
 
-type StoredTask = {
-  id: string
-  title: string
-  completed: boolean
-}
+import type { Task, StudySession, StudySection } from './types'
 
-type StoredStudySession = {
-  id: string
-  name: string
-  durationSeconds: number
-  date: string
-}
-
-interface Window {
+declare global {
+  interface Window {
     focusDeskStorage: {
-        getTasks: () => Promise<StoredTask[]>
-        setTasks: (tasks: StoredTask[]) => Promise<void>
-
-        getSessions: () => Promise<StoredStudySession[]>
-        setSessions: (sessions: StoredStudySession[]) => Promise<void>
+      getTasks: () => Promise<Task[]>
+      setTasks: (tasks: Task[]) => Promise<void>
+      getSessions: () => Promise<StudySession[]>
+      setSessions: (sessions: StudySession[]) => Promise<void>
+      getSections: () => Promise<StudySection[]>
+      createSection: (name: string) => Promise<StudySection>
+      deleteSection: (sectionId: string) => Promise<void>
     }
+  }
 }

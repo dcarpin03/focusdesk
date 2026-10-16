@@ -3,6 +3,12 @@ export type StudySession = {
   name: string
   durationSeconds: number
   date: string
+  sectionId?: string
+}
+
+export type StudySection = {
+  id: string
+  name: string
 }
 
 export type Task = {

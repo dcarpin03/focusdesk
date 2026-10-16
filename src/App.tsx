@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import type { StudySession, Task } from './types'
+import type { StudySection, StudySession, Task } from './types'
 import { TimerCard } from './components/TimerCard'
 import { TasksCard } from './components/TasksCard'
 import { HistoryCard } from './components/HistoryCard'
@@ -19,6 +19,10 @@ function App() {
 
   const [sessionName, setSessionName] = useState('')
   const [activeSessionName, setActiveSessionName] = useState('')
+  const [sections, setSections] = useState<StudySection[]>([])
+  const [selectedSectionId, setSelectedSectionId] = useState('')
+  const [activeSectionId, setActiveSectionId] = useState('')
+  const [isSectionPending, setIsSectionPending] = useState(false)
   const [sessions, setSessions] = useState<StudySession[]>([])
   const [taskTitle, setTaskTitle] = useState('')
   const [tasks, setTasks] = useState<Task[]>([])
@@ -29,9 +33,11 @@ function App() {
       try {
         const storedTasks = await window.focusDeskStorage.getTasks()
         const storedSessions = await window.focusDeskStorage.getSessions()
+        const storedSections = await window.focusDeskStorage.getSections()
 
         setTasks(storedTasks)
         setSessions(storedSessions)
+        setSections(storedSections)
         setIsStorageLoaded(true)
       } catch(error) {
         console.error('Error al cargar los datos de FocusDesk:', error)
@@ -65,12 +71,14 @@ function App() {
   const handleStartTimer = () => {
     const trimmedName = sessionName.trim()
 
-    if (isRunning || !trimmedName) {
+    if (isRunning || !trimmedName || !isStorageLoaded || isSectionPending ||
+      !sections.some((section) => section.id === selectedSectionId)) {
       return
     }
 
     setSessionName(trimmedName)
     setActiveSessionName(trimmedName)
+    setActiveSectionId(selectedSectionId)
     startTimer()
   }
 
@@ -82,6 +90,7 @@ function App() {
     const newSession: StudySession = {
       id: crypto.randomUUID(),
       name: activeSessionName,
+      sectionId: activeSectionId,
       durationSeconds: elapsedSeconds,
       date: new Date().toLocaleDateString('es-ES')
     }
@@ -91,6 +100,41 @@ function App() {
     resetTimer()
     setSessionName('')
     setActiveSessionName('')
+    setActiveSectionId('')
+  }
+
+  const handleAddSection = async (name: string) => {
+    if (isRunning || isSectionPending || !isStorageLoaded) {
+      throw new Error('No se puede crear la sección en este momento.')
+    }
+
+    setIsSectionPending(true)
+    try {
+      const section = await window.focusDeskStorage.createSection(name)
+      setSections((currentSections) => [...currentSections, section])
+      setSelectedSectionId(section.id)
+    } finally {
+      setIsSectionPending(false)
+    }
+  }
+
+  const handleDeleteSection = async (sectionId: string) => {
+    if (isSectionPending || !isStorageLoaded ||
+      (isRunning && activeSectionId === sectionId) ||
+      sessions.some((session) => session.sectionId === sectionId)) {
+      throw new Error('Solo se pueden eliminar secciones vacías y sin una sesión en curso.')
+    }
+
+    setIsSectionPending(true)
+    try {
+      await window.focusDeskStorage.deleteSection(sectionId)
+      setSections((currentSections) => currentSections.filter((section) => section.id !== sectionId))
+      if (selectedSectionId === sectionId) {
+        setSelectedSectionId('')
+      }
+    } finally {
+      setIsSectionPending(false)
+    }
   }
 
   const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
@@ -133,6 +177,11 @@ function App() {
     <div className='app'>
       <main className='app-content'>
         <TimerCard 
+            sections={sections}
+            selectedSectionId={selectedSectionId}
+            onSectionChange={setSelectedSectionId}
+            onAddSection={handleAddSection}
+            isSectionPending={isSectionPending || !isStorageLoaded}
             sessionName={sessionName}
             elapsedSeconds={elapsedSeconds}
             isRunning={isRunning}
@@ -152,7 +201,14 @@ function App() {
             onDeleteTask={handleDeleteTask}
           />
 
-          <HistoryCard sessions={sessions} formatTime={formatTime} />
+          <HistoryCard
+            sessions={sessions}
+            sections={sections}
+            activeSectionId={isRunning ? activeSectionId : ''}
+            isSectionPending={isSectionPending || !isStorageLoaded}
+            onDeleteSection={handleDeleteSection}
+            formatTime={formatTime}
+          />
 
         </section>
       </main>

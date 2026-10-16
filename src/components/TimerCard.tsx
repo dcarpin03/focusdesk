@@ -1,4 +1,12 @@
+import type { StudySection } from '../types'
+import { SectionPicker } from './SectionPicker'
+
 type TimerCardProps = {
+    sections: StudySection[]
+    selectedSectionId: string
+    onSectionChange: (sectionId: string) => void
+    onAddSection: (name: string) => Promise<void>
+    isSectionPending: boolean
     sessionName: string
     elapsedSeconds: number
     isRunning: boolean
@@ -9,6 +17,11 @@ type TimerCardProps = {
 }
 
 export function TimerCard({
+    sections,
+    selectedSectionId,
+    onSectionChange,
+    onAddSection,
+    isSectionPending,
     sessionName,
     elapsedSeconds,
     isRunning,
@@ -18,6 +31,13 @@ export function TimerCard({
 }: TimerCardProps) {
     return (
         <section className='timer-card'>
+          <SectionPicker
+            sections={sections}
+            selectedSectionId={selectedSectionId}
+            disabled={isRunning || isSectionPending}
+            onSectionChange={onSectionChange}
+            onAddSection={onAddSection}
+          />
           <div className='session-form'>
             <label className='field'>
               <span>Nombre de la sesión (obligatorio)</span>
@@ -58,7 +78,7 @@ export function TimerCard({
 
           <div className='timer-actions'>
             {!isRunning ? (
-              <button type='button' className='primary-button' onClick={onStart} disabled={!sessionName.trim()}>
+              <button type='button' className='primary-button' onClick={onStart} disabled={!sessionName.trim() || !selectedSectionId || isSectionPending}>
                 ▶ Iniciar sesión
               </button>
             ) : (

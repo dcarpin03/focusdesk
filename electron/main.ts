@@ -1,10 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import { store } from './store'
 import path from 'node:path'
+import { randomUUID } from 'node:crypto'
 
-const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // The built directory structure
@@ -41,6 +40,32 @@ ipcMain.handle('storage:get-sessions', () => {
 
 ipcMain.handle('storage:set-sessions', (_event, sessions) => {
   store.set('sessions', sessions)
+})
+
+ipcMain.handle('storage:get-sections', () => store.get('sections'))
+
+ipcMain.handle('storage:create-section', (_event, name: string) => {
+  if (typeof name !== 'string' || !name.trim()) {
+    throw new Error('El nombre de la sección es obligatorio.')
+  }
+
+  const sections = store.get('sections')
+  const trimmedName = name.trim()
+  if (sections.some((section) => section.name.toLocaleLowerCase() === trimmedName.toLocaleLowerCase())) {
+    throw new Error('Ya existe una sección con ese nombre.')
+  }
+
+  const section = { id: randomUUID(), name: trimmedName }
+  store.set('sections', [...sections, section])
+  return section
+})
+
+ipcMain.handle('storage:delete-section', (_event, sectionId: string) => {
+  if (store.get('sessions').some((session) => session.sectionId === sectionId)) {
+    throw new Error('Solo se pueden eliminar secciones vacías.')
+  }
+
+  store.set('sections', store.get('sections').filter((section) => section.id !== sectionId))
 })
 
 function createWindow() {
