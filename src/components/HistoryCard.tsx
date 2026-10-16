@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { StudySection, StudySession } from '../types'
+import { DEFAULT_SECTION_COLOR } from '../utils/sectionColors'
 
 type HistoryCardProps = {
   sessions: StudySession[]
@@ -18,12 +19,13 @@ export function HistoryCard({ sessions, sections, activeSectionId, isSectionPend
   const groups = sections.map((section) => ({
     id: section.id,
     name: section.name,
+    color: section.color,
     removable: true,
     sessions: sessions.filter((session) => session.sectionId === section.id)
   }))
 
   if (unassignedSessions.length > 0) {
-    groups.push({ id: 'unassigned', name: 'Sin sección', removable: false, sessions: unassignedSessions })
+    groups.push({ id: 'unassigned', name: 'Sin sección', color: DEFAULT_SECTION_COLOR, removable: false, sessions: unassignedSessions })
   }
 
   const toggleGroup = (groupId: string) => {
@@ -69,6 +71,7 @@ export function HistoryCard({ sessions, sections, activeSectionId, isSectionPend
                   onClick={() => toggleGroup(group.id)}
                 >
                   <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>
+                  <span className='section-color-dot' aria-hidden='true' style={{ backgroundColor: group.color }}></span>
                   <span className='section-name'>{group.name} ({group.sessions.length})</span>
                 </button>
                 {group.removable && (

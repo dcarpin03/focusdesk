@@ -10,7 +10,7 @@ declare global {
       getSessions: () => Promise<StudySession[]>
       setSessions: (sessions: StudySession[]) => Promise<void>
       getSections: () => Promise<StudySection[]>
-      createSection: (name: string) => Promise<StudySection>
+      createSection: (name: string, color: string) => Promise<StudySection>
       deleteSection: (sectionId: string) => Promise<void>
     }
   }

@@ -9,6 +9,7 @@ export type StudySession = {
 export type StudySection = {
   id: string
   name: string
+  color: string
 }
 
 export type Task = {

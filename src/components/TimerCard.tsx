@@ -5,7 +5,6 @@ type TimerCardProps = {
     sections: StudySection[]
     selectedSectionId: string
     onSectionChange: (sectionId: string) => void
-    onAddSection: (name: string) => Promise<void>
     isSectionPending: boolean
     sessionName: string
     elapsedSeconds: number
@@ -20,7 +19,6 @@ export function TimerCard({
     sections,
     selectedSectionId,
     onSectionChange,
-    onAddSection,
     isSectionPending,
     sessionName,
     elapsedSeconds,
@@ -31,26 +29,27 @@ export function TimerCard({
 }: TimerCardProps) {
     return (
         <section className='timer-card'>
-          <SectionPicker
-            sections={sections}
-            selectedSectionId={selectedSectionId}
-            disabled={isRunning || isSectionPending}
-            onSectionChange={onSectionChange}
-            onAddSection={onAddSection}
-          />
           <div className='session-form'>
-            <label className='field'>
-              <span>Nombre de la sesión (obligatorio)</span>
-              <input 
-                type='text' 
-                placeholder='Ej. Leer libro'
-                value={sessionName}
-                required
-                readOnly={isRunning}
-                aria-describedby='session-name-hint'
-                onChange={(event) => onSessionNameChange(event.target.value)}
+            <div className='session-fields'>
+              <label className='field'>
+                <span>Nombre de la sesión (obligatorio)</span>
+                <input
+                  type='text'
+                  placeholder='Ej. Leer libro'
+                  value={sessionName}
+                  required
+                  readOnly={isRunning}
+                  aria-describedby='session-name-hint'
+                  onChange={(event) => onSessionNameChange(event.target.value)}
+                />
+              </label>
+              <SectionPicker
+                sections={sections}
+                selectedSectionId={selectedSectionId}
+                disabled={isRunning || isSectionPending}
+                onSectionChange={onSectionChange}
               />
-            </label>
+            </div>
 
             <p className='session-hint' id='session-name-hint'>
               {isRunning

@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
-import { store } from './store'
+import { getSections, store } from './store'
+import { isSectionColor } from '../src/utils/sectionColors'
 import path from 'node:path'
 import { randomUUID } from 'node:crypto'
 
@@ -42,20 +43,24 @@ ipcMain.handle('storage:set-sessions', (_event, sessions) => {
   store.set('sessions', sessions)
 })
 
-ipcMain.handle('storage:get-sections', () => store.get('sections'))
+ipcMain.handle('storage:get-sections', () => getSections())
 
-ipcMain.handle('storage:create-section', (_event, name: string) => {
+ipcMain.handle('storage:create-section', (_event, name: string, color: string) => {
   if (typeof name !== 'string' || !name.trim()) {
     throw new Error('El nombre de la sección es obligatorio.')
   }
 
-  const sections = store.get('sections')
+  if (!isSectionColor(color)) {
+    throw new Error('Selecciona un color válido para la sección.')
+  }
+
+  const sections = getSections()
   const trimmedName = name.trim()
-  if (sections.some((section) => section.name.toLocaleLowerCase() === trimmedName.toLocaleLowerCase())) {
+  if (sections.some((section) => section.name.trim().toLocaleLowerCase() === trimmedName.toLocaleLowerCase())) {
     throw new Error('Ya existe una sección con ese nombre.')
   }
 
-  const section = { id: randomUUID(), name: trimmedName }
+  const section = { id: randomUUID(), name: trimmedName, color }
   store.set('sections', [...sections, section])
   return section
 })

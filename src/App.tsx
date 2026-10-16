@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import type { StudySection, StudySession, Task } from './types'
 import { TimerCard } from './components/TimerCard'
+import { SectionForm } from './components/SectionForm'
 import { TasksCard } from './components/TasksCard'
 import { HistoryCard } from './components/HistoryCard'
 import { Footer } from './components/Footer'
@@ -103,14 +104,14 @@ function App() {
     setActiveSectionId('')
   }
 
-  const handleAddSection = async (name: string) => {
+  const handleAddSection = async (name: string, color: string) => {
     if (isRunning || isSectionPending || !isStorageLoaded) {
       throw new Error('No se puede crear la sección en este momento.')
     }
 
     setIsSectionPending(true)
     try {
-      const section = await window.focusDeskStorage.createSection(name)
+      const section = await window.focusDeskStorage.createSection(name, color)
       setSections((currentSections) => [...currentSections, section])
       setSelectedSectionId(section.id)
     } finally {
@@ -175,12 +176,16 @@ function App() {
 
   return (
     <div className='app'>
+      <SectionForm
+        sections={sections}
+        disabled={isRunning || isSectionPending || !isStorageLoaded}
+        onAddSection={handleAddSection}
+      />
       <main className='app-content'>
         <TimerCard 
             sections={sections}
             selectedSectionId={selectedSectionId}
             onSectionChange={setSelectedSectionId}
-            onAddSection={handleAddSection}
             isSectionPending={isSectionPending || !isStorageLoaded}
             sessionName={sessionName}
             elapsedSeconds={elapsedSeconds}
