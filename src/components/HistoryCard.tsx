@@ -63,9 +63,9 @@ export function HistoryCard({ showSummary = false, isOpen, onToggle, sessions, s
           onClick={onToggle}
         >
           {showSummary && <span className='card-icon'><Icon name='clock' /></span>}
-          <span>Historial de sesiones</span>
-          {showSummary && <span className='panel-summary'>{sessions.length} sesiones</span>}
-          <span className='panel-arrow' aria-hidden='true'>{isOpen ? '▾' : '▸'}</span>
+          <span className='panel-title'>Historial de sesiones</span>
+          {showSummary && <span className='panel-summary'>{sessions.length} {sessions.length === 1 ? 'sesión' : 'sesiones'}</span>}
+          <span className='panel-arrow' aria-hidden='true'>{showSummary ? <Icon name='chevron' /> : isOpen ? '▾' : '▸'}</span>
         </button>
       </h2>
       <div className='panel-content' id='history-panel-content' hidden={!isOpen}>
@@ -88,10 +88,16 @@ export function HistoryCard({ showSummary = false, isOpen, onToggle, sessions, s
                     aria-controls={`history-group-${group.id}`}
                     onClick={() => toggleGroup(group.id)}
                   >
-                    <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>
+                    {!showSummary && <span aria-hidden='true'>{expanded ? '▾' : '▸'}</span>}
                     <span className='section-color-dot' aria-hidden='true' style={{ backgroundColor: group.color }}></span>
-                    <span className='section-name'>{group.name} ({group.sessions.length})</span>
+                    <span className='section-name'>
+                      {group.name}
+                      {showSummary
+                        ? <small className='section-count'>{group.sessions.length} {group.sessions.length === 1 ? 'sesión' : 'sesiones'}</small>
+                        : ` (${group.sessions.length})`}
+                    </span>
                     {showSummary && <span className='section-total' title='Tiempo acumulado de la sección'>{formatTime(group.sessions.reduce((total, session) => total + session.durationSeconds, 0))}</span>}
+                    {showSummary && <span className='group-arrow' aria-hidden='true'><Icon name='chevron' /></span>}
                   </button>
                   {group.removable && (
                     <button
@@ -101,7 +107,7 @@ export function HistoryCard({ showSummary = false, isOpen, onToggle, sessions, s
                       disabled={!canDelete}
                       title={isActive ? 'Hay una sesión en curso en esta sección.' : group.sessions.length > 0 ? 'Esta sección contiene sesiones y no se puede eliminar.' : 'Eliminar sección vacía'}
                       onClick={() => handleDelete(group.id)}
-                    >Eliminar sección</button>
+                    >{showSummary ? <Icon name='trash' /> : 'Eliminar sección'}</button>
                   )}
                 </div>
                 <ul className='section-sessions' id={`history-group-${group.id}`} hidden={!expanded}>
@@ -109,7 +115,7 @@ export function HistoryCard({ showSummary = false, isOpen, onToggle, sessions, s
                     <li className='history-empty'>Todavía no hay sesiones en esta sección.</li>
                   ) : group.sessions.map((session) => (
                     <li className='history-item' key={session.id}>
-                      <span className='history-dot' aria-hidden='true'></span>
+                      <span className='history-dot' aria-hidden='true'>{showSummary && <Icon name='clock' />}</span>
                       <span className='history-name'>{session.name}</span>
                       <span className='history-duration'>{formatTime(session.durationSeconds)}</span>
                       <span className='history-date'>{session.date}</span>

@@ -36,16 +36,17 @@ export function TasksCard({
                 onClick={onToggle}
               >
                 <span className='card-icon' aria-hidden='true'>{showSummary ? <Icon name='check' /> : '☷'}</span>
-                <span>Tareas</span>
+                <span className='panel-title'>Tareas</span>
                 {showSummary && <span className='panel-summary'>{tasks.filter((task) => task.completed).length} de {tasks.length} completadas</span>}
-                <span className='panel-arrow' aria-hidden='true'>{isOpen ? '▾' : '▸'}</span>
+                <span className='panel-arrow' aria-hidden='true'>{showSummary ? <Icon name='chevron' /> : isOpen ? '▾' : '▸'}</span>
               </button>
             </h2>
 
             <div className='panel-content' id='tasks-panel-content' hidden={!isOpen}>
-              <form className='task-form' onSubmit={onAddTask}>
+              <form className='task-form' aria-label='Añadir una tarea' onSubmit={onAddTask}>
                 <input
                   type='text'
+                  aria-label='Nueva tarea'
                   placeholder='Nueva tarea...'
                   value={taskTitle}
                   onChange={(event) => onTaskTitleChange(event.target.value)}

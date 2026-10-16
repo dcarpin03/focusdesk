@@ -5,12 +5,13 @@ import { DEFAULT_SECTION_COLOR, SECTION_COLORS } from '../utils/sectionColors'
 
 type SectionFormProps = {
   icon?: ReactNode
+  title?: string
   sections: StudySection[]
   disabled: boolean
   onAddSection: (name: string, color: string) => Promise<void>
 }
 
-export function SectionForm({ sections, disabled, onAddSection, icon }: SectionFormProps) {
+export function SectionForm({ sections, disabled, onAddSection, icon, title = 'Nueva sección' }: SectionFormProps) {
   const [sectionName, setSectionName] = useState('')
   const [color, setColor] = useState<string>(DEFAULT_SECTION_COLOR)
   const [error, setError] = useState('')
@@ -41,7 +42,7 @@ export function SectionForm({ sections, disabled, onAddSection, icon }: SectionF
     <form className='section-form' aria-label='Crear una sección' onSubmit={handleSubmit}>
       {icon && <span className='section-form-icon' aria-hidden='true'>{icon}</span>}
       <label className='field'>
-        <span>Nueva sección</span>
+        <span>{title}</span>
         <input
           value={sectionName}
           placeholder='Ej. Matemáticas'

@@ -56,6 +56,7 @@ export function EditorialLayout({ model }: LayoutProps) {
 
         <aside className='editorial-sidebar' aria-label='Organización del estudio'>
           <SectionForm
+            title='Crear nueva sección'
             icon={<Icon name='folder' />}
             sections={model.sections}
             disabled={model.isRunning || sectionPending}
