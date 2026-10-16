@@ -1,0 +1,244 @@
+/* Glass owns its night palette; the saved color theme remains independent. */
+.glass-layout {
+  color-scheme: dark;
+  --color-background: #0e1529;
+  --color-surface: #152039;
+  --color-text: #f4f5ff;
+  --color-text-muted: #bec8e2;
+  --color-label: #d4dcf2;
+  --color-primary: #b49aff;
+  --color-primary-button: #7046d0;
+  --color-on-primary: #fff;
+  --color-accent-text: #d5c5ff;
+  --color-border: #5a6a8b;
+  --color-input-border: #7582a2;
+  --color-divider: #3a4764;
+  --color-input: #16223b;
+  --color-surface-muted: #202c48;
+  --color-hover: #303d5d;
+  --color-focus: #b9ceff;
+  --color-pending-background: #303449;
+  --color-pending-text: #eee3bb;
+  --color-done-background: #203d3c;
+  --color-done-text: #b3e6d6;
+  --color-success: #a6dcca;
+  --color-danger: #ffbcbf;
+  --color-danger-muted: #d5c2ed;
+  --color-danger-hover: #503245;
+  --shadow-card: 0 14px 40px #03081645;
+  --glass-panel: linear-gradient(135deg, #202d48c9, #0f192edb);
+  --glass-radius: 22px;
+  --glass-dial-size: clamp(260px, calc(100dvh - 490px), 420px);
+  position: relative;
+  isolation: isolate;
+  height: auto;
+  min-height: 100dvh;
+  gap: 20px;
+  padding: 24px clamp(18px, 2.5vw, 44px);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: radial-gradient(ellipse at 3% 85%, #ad703c66, transparent 34%), radial-gradient(ellipse at 55% 25%, #80648680, transparent 42%), linear-gradient(170deg, #1f3659, #22253f 43%, #0c172b 80%);
+}
+/* Local CSS atmosphere, never a mockup screenshot or invented activity data. */
+.glass-layout::before {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  inset: 20% 0 25%;
+  background: linear-gradient(#0c1836aa, #0c1836ee);
+  clip-path: polygon(0 62%, 10% 28%, 16% 40%, 24% 8%, 30% 28%, 34% 16%, 46% 64%, 55% 48%, 62% 60%, 73% 22%, 78% 39%, 84% 20%, 100% 67%, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+.glass-layout::after {
+  content: '';
+  position: fixed;
+  z-index: -1;
+  inset: 70% 0 0;
+  background: radial-gradient(ellipse at 60% 0, #8a6e9c44, transparent 55%), linear-gradient(0deg, #090f21b0, transparent);
+  pointer-events: none;
+}
+.glass-layout .glass-header { display: flex; align-items: center; gap: 24px; min-height: 64px; }
+.glass-layout .glass-brand { display: flex; align-items: center; gap: 15px; }
+.glass-layout .glass-brand > svg { width: 44px; height: 44px; flex-shrink: 0; color: #d1b8ff; fill: #9466ee66; filter: drop-shadow(0 0 10px #956bff60); }
+.glass-layout .glass-brand h1 { margin: 0; font-size: 30px; letter-spacing: -.7px; line-height: 1.2; }
+.glass-layout .glass-brand p { margin: 5px 0 0; font-size: 13px; color: var(--color-text-muted); }
+.glass-layout .glass-header-quote { margin: 0 auto; color: var(--color-text-muted); font-size: 14px; }
+.glass-layout .settings { margin-left: auto; }
+.glass-layout .settings-trigger { width: 46px; height: 46px; background: #233353b8; border-color: #8498c0; color: var(--color-text); box-shadow: 0 4px 20px #060b2444; }
+.glass-layout .settings-trigger:hover,
+.glass-layout .settings-trigger[aria-expanded='true'] { background: var(--color-hover); border-color: var(--color-primary); }
+.glass-layout .settings-panel { top: 98px; right: 24px; max-height: calc(100dvh - 118px); }
+.glass-layout .glass-content { display: grid; grid-template-columns: minmax(240px, .85fr) minmax(0, 1.4fr) minmax(0, 1.2fr); gap: 24px; min-width: 0; flex: 1; }
+.glass-layout .glass-sections,
+.glass-layout .glass-focus,
+.glass-layout .glass-sidebar { min-width: 0; min-height: 0; }
+.glass-layout .glass-sections { align-self: start; border: 1px solid var(--color-border); border-radius: var(--glass-radius); padding: 22px; background: var(--glass-panel); box-shadow: var(--shadow-card); backdrop-filter: blur(18px); }
+.glass-layout .glass-section-selection h2 { display: flex; align-items: center; gap: 10px; margin: 0 0 20px; font-size: 17px; }
+.glass-layout .glass-section-selection h2 svg { color: var(--color-accent-text); flex-shrink: 0; }
+.glass-layout .field { min-width: 0; gap: 9px; }
+.glass-layout .field span { font-size: 13px; font-weight: 500; }
+.glass-layout .field input,
+.glass-layout .field select { width: 100%; min-width: 0; height: 44px; padding: 10px 12px; border-radius: 12px; font-size: 14px; }
+.glass-layout .section-form { display: grid; grid-template-columns: minmax(0, 1fr); margin: 24px 0 0; padding: 24px 0 0; gap: 18px; border: 0; border-top: 1px solid var(--color-divider); border-radius: 0; background: none; box-shadow: none; }
+.glass-layout .section-form .field span { font-size: 17px; font-weight: 600; }
+.glass-layout .section-form button { min-height: 44px; padding: 10px 12px; border-radius: 12px; background: #44416b; color: var(--color-text); border: 1px solid #8584b3; }
+.glass-layout .section-form button:hover:not(:disabled) { background: #575182; }
+.glass-layout .color-options { gap: 12px; padding: 5px; }
+.glass-layout .color-options input { width: 27px; height: 27px; }
+.glass-layout .color-options input:checked { outline: 2px solid var(--color-text); outline-offset: 3px; box-shadow: 0 0 12px #b49aff77; }
+.glass-layout .color-palette legend { color: var(--color-text-muted); font-size: 12px; }
+.glass-layout .glass-focus { display: flex; flex-direction: column; gap: 16px; }
+.glass-layout .glass-timer,
+.glass-layout .glass-daily,
+.glass-layout .tasks-card,
+.glass-layout .history-card { border-radius: var(--glass-radius); border: 1px solid var(--color-border); background: var(--glass-panel); box-shadow: var(--shadow-card); backdrop-filter: blur(18px); }
+.glass-layout .glass-timer { flex: 1; display: flex; align-items: center; justify-content: center; gap: 26px; overflow: visible; padding: 28px 24px; min-height: 570px; }
+.glass-layout .glass-dial {
+  container-type: inline-size;
+  flex: none;
+  width: min(var(--glass-dial-size), 100%);
+  min-height: 0;
+  aspect-ratio: 1;
+  margin: 0;
+  padding: 16px 10px;
+  border: 5px solid transparent;
+  border-radius: 50%;
+  gap: 10px;
+  background: linear-gradient(#15223be8, #18243be8) padding-box, linear-gradient(135deg, #be90ff 10%, #8d69ff 42%, #6cc4f4 75%, #9a86ff) border-box;
+  box-shadow: 0 0 0 7px #879aff12, 0 0 28px #8d69ff33, inset 0 0 22px #849aff1c;
+}
+.glass-layout .glass-dial > svg { width: clamp(24px, 10cqi, 40px); height: clamp(24px, 10cqi, 40px); color: #d1b8ff; fill: #9466ee55; }
+.glass-layout .glass-timer-state { font-size: clamp(12px, 3.8cqi, 15px); color: var(--color-text-muted); }
+.glass-layout .timer-clock { display: grid; justify-items: center; gap: 2px; width: 100%; font-family: 'Segoe UI', system-ui, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+.glass-layout .timer-clock .glass-hours { display: flex; align-items: baseline; justify-content: center; gap: 5px; max-width: 100%; font-size: clamp(12px, 4cqi, 16px); font-weight: 500; color: var(--color-text-muted); overflow-wrap: anywhere; }
+.glass-layout .glass-hours small { font: inherit; }
+.glass-layout .timer-clock .glass-main-time { display: grid; grid-template-columns: 2ch .45ch 2ch; align-items: baseline; justify-content: center; gap: 0; font-size: clamp(44px, 24cqi, 104px); line-height: 1.15; font-weight: 600; color: var(--color-text); }
+.glass-layout .glass-main-time > span { display: block; }
+.glass-layout .glass-time-separator { color: #ded4ff; font-weight: 400; }
+.glass-layout .timer-label { padding: 5px 12px; background: #252e4b; color: var(--color-accent-text); font-size: 11px; font-weight: 500; }
+.glass-layout .glass-session-card { width: 100%; min-width: 0; }
+.glass-layout .session-form { margin: 0 0 18px; gap: 10px; }
+.glass-layout .session-fields { grid-template-columns: minmax(0, 1fr); }
+.glass-layout .session-hint { font-size: 12px; line-height: 1.4; }
+.glass-layout .timer-actions button { width: 100%; min-width: 0; min-height: 48px; padding: 12px 16px; border-radius: 14px; font-size: 15px; border: 1px solid #b49aff; box-shadow: 0 4px 20px #6046c733; }
+.glass-layout .primary-button { background: linear-gradient(115deg, #8252d7, #5447d1); color: #fff; }
+.glass-layout .secondary-button { background: #393458; color: var(--color-text); }
+.glass-layout .primary-button:disabled { background: #39435e; border-color: #6a7898; opacity: 1; color: #c9d1e5; box-shadow: none; }
+.glass-layout .timer-actions button:hover:not(:disabled) { filter: brightness(1.12); transform: none; }
+.glass-layout .primary-button:disabled:hover { transform: none; }
+.glass-layout .glass-daily { display: flex; align-items: center; min-width: 0; gap: 14px; margin: 0; padding: 18px 20px; }
+.glass-layout .glass-daily-icon { display: grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; border: 1px solid #7395a7; border-radius: 50%; color: #a6efeb; background: #24464a77; }
+.glass-layout .glass-daily-icon svg { width: 28px; height: 28px; }
+.glass-layout .glass-daily-summary { display: grid; gap: 4px; min-width: 0; }
+.glass-layout .glass-daily-title { font-size: 13px; color: var(--color-label); }
+.glass-layout .glass-daily strong { font-size: 28px; line-height: 1.15; font-variant-numeric: tabular-nums; color: var(--color-text); }
+.glass-layout .glass-daily-duration { display: flex; flex-wrap: wrap; gap: 0 9px; overflow-wrap: anywhere; }
+.glass-layout .glass-daily-duration small { font-size: 13px; font-weight: 500; color: var(--color-text-muted); }
+.glass-layout .glass-daily-caption { font-size: 12px; line-height: 1.4; }
+.glass-layout .glass-daily-note { display: none; }
+.glass-layout .glass-sidebar { container: glass-sidebar / inline-size; gap: 18px; }
+.glass-layout .tasks-card,
+.glass-layout .history-card { padding: 20px; }
+.glass-layout .panel-header { font-size: 18px; font-weight: 600; }
+.glass-layout .panel-toggle { display: grid; grid-template-columns: 28px minmax(0, 1fr) 18px; gap: 8px; min-height: 38px; }
+.glass-layout .panel-title { overflow-wrap: anywhere; }
+.glass-layout .card-icon { display: grid; place-items: center; color: var(--color-accent-text); }
+.glass-layout .card-icon svg { width: 24px; height: 24px; }
+.glass-layout .panel-summary { grid-column: 2; grid-row: 2; font-size: 11px; font-weight: 400; color: var(--color-text-muted); }
+.glass-layout .panel-arrow { grid-column: 3; grid-row: 1; color: var(--color-text-muted); display: flex; }
+.glass-layout .panel-arrow svg,
+.glass-layout .group-arrow svg { width: 15px; height: 15px; }
+.glass-layout [aria-expanded='true'] > .panel-arrow,
+.glass-layout [aria-expanded='true'] > .group-arrow { transform: rotate(90deg); }
+.glass-layout .panel-content { margin-top: 16px; }
+.glass-layout .task-form { gap: 8px; margin-bottom: 12px; }
+.glass-layout .task-form input { padding: 10px 12px; border-radius: 10px; font-size: 13px; }
+.glass-layout .task-form button { border-radius: 10px; font-size: 12px; padding: 0 12px; }
+.glass-layout .task-form button:hover { background: #835be0; }
+.glass-layout .task-item { grid-template-columns: 22px minmax(0, 1fr) 32px; gap: 4px 10px; padding: 10px 2px; font-size: 13px; line-height: 1.4; }
+.glass-layout .task-item input[type='checkbox'] { width: 20px; height: 20px; margin: 0; }
+.glass-layout .task-status { grid-column: 2; grid-row: 2; padding: 3px 7px; font-size: 10px; }
+.glass-layout .task-menu { grid-column: 3; grid-row: 1 / 3; }
+.glass-layout .history-help { font-size: 12px; line-height: 1.4; margin-bottom: 12px; }
+.glass-layout .history-group { padding: 0; margin-bottom: 10px; border: 0; }
+.glass-layout .history-group-header { display: grid; grid-template-columns: minmax(0, 1fr) 32px; gap: 5px; padding: 6px 8px; border: 1px solid var(--color-divider); border-radius: 10px; background: #29355088; }
+.glass-layout .section-toggle { display: grid; grid-template-columns: 14px minmax(0, 1fr) 15px; gap: 5px 8px; min-height: 38px; padding: 4px 0; font-size: 13px; }
+.glass-layout .section-color-dot { width: 14px; height: 14px; border-radius: 4px; }
+.glass-layout .section-name { display: grid; gap: 3px; min-width: 0; line-height: 1.35; }
+.glass-layout .section-count { color: var(--color-text-muted); font-size: 11px; font-weight: 400; }
+.glass-layout .section-total { grid-column: 2; grid-row: 2; font-size: 12px; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.glass-layout .group-arrow { grid-column: 3; grid-row: 1; display: flex; color: var(--color-text-muted); }
+.glass-layout .section-sessions { padding: 0 6px; }
+.glass-layout .history-item { gap: 4px 8px; padding: 10px 0; font-size: 12px; }
+.glass-layout .history-dot { width: 14px; height: 14px; background: none; color: var(--color-text-muted); display: flex; }
+.glass-layout .history-dot svg { width: 14px; height: 14px; }
+.glass-layout .history-duration { font-size: 12px; font-variant-numeric: tabular-nums; }
+.glass-layout .history-date { white-space: normal; overflow-wrap: anywhere; font-size: 11px; }
+.glass-layout .task-menu,
+.glass-layout .session-delete,
+.glass-layout .section-delete { display: grid; place-items: center; width: 32px; height: 32px; min-width: 32px; padding: 0; border: 0; border-radius: 8px; background: none; color: var(--color-danger-muted); cursor: pointer; }
+.glass-layout .task-menu svg,
+.glass-layout .session-delete svg,
+.glass-layout .section-delete svg { width: 17px; height: 17px; }
+.glass-layout .task-menu:hover,
+.glass-layout .session-delete:hover,
+.glass-layout .section-delete:hover:not(:disabled) { background: var(--color-danger-hover); color: var(--color-danger); }
+.glass-layout .section-delete:disabled { opacity: .4; cursor: not-allowed; }
+.glass-layout .task-empty,
+.glass-layout .history-empty { padding: 14px 0; font-size: 13px; line-height: 1.5; }
+.glass-layout button:focus-visible,
+.glass-layout input:focus-visible,
+.glass-layout select:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.glass-layout .panel-toggle:focus-visible { outline-offset: -2px; }
+.glass-layout .section-error { font-size: 12px; line-height: 1.5; }
+.glass-layout .task-list,
+.glass-layout .history-list { scroll-padding-block: 6px; scrollbar-color: #6e7da1 #152039; }
+html:has(.glass-layout), body:has(.glass-layout), #root:has(> .glass-layout) { min-width: 0; }
+
+@media (min-width: 1151px) {
+  .glass-layout { height: 100dvh; min-height: 800px; }
+  .glass-layout .glass-content { min-height: 0; }
+}
+@media (max-width: 1400px) and (min-width: 1151px) {
+  .glass-layout { padding: 20px; gap: 18px; }
+  .glass-layout .glass-content { gap: 18px; grid-template-columns: minmax(225px, .8fr) minmax(0, 1.25fr) minmax(0, 1.1fr); }
+  .glass-layout .glass-sections { padding: 18px; }
+  .glass-layout .glass-timer { padding: 24px 18px; }
+  .glass-layout .tasks-card, .glass-layout .history-card { padding: 16px; }
+}
+@media (max-width: 1150px) {
+  .glass-layout { --glass-dial-size: 320px; }
+  .glass-layout .glass-content { grid-template-columns: 260px minmax(0, 1fr); }
+  .glass-layout .glass-sidebar { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto; align-items: start; }
+  .glass-layout .glass-sidebar .tasks-card, .glass-layout .glass-sidebar .history-card { height: auto; }
+  .glass-layout .glass-sidebar.side-content-tasks-open .tasks-card,
+  .glass-layout .glass-sidebar.side-content-history-open .history-card { height: 420px; }
+  .glass-layout .glass-header-quote { display: none; }
+}
+@media (max-width: 760px) {
+  .glass-layout { padding: 14px; gap: 16px; --glass-dial-size: 300px; }
+  .glass-layout .glass-header { gap: 12px; }
+  .glass-layout .glass-brand { gap: 10px; }
+  .glass-layout .glass-brand h1 { font-size: 25px; }
+  .glass-layout .glass-brand > svg { width: 34px; height: 34px; }
+  .glass-layout .glass-brand p { font-size: 11px; }
+  .glass-layout .settings-trigger { width: 40px; height: 40px; }
+  .glass-layout .glass-content { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .glass-layout .glass-sidebar { grid-column: auto; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .glass-layout .glass-timer { min-height: 0; padding: 24px 18px; }
+  .glass-layout .glass-sections { padding: 20px; }
+  .glass-layout .glass-daily { padding: 18px; }
+  .glass-layout .settings-panel { top: 90px; left: 12px; right: 12px; width: auto; max-height: calc(100dvh - 102px); }
+}
+@media (max-width: 380px) {
+  .glass-layout { padding: 10px; --glass-dial-size: 250px; }
+  .glass-layout .glass-brand h1 { font-size: 23px; }
+  .glass-layout .glass-brand p { max-width: 170px; }
+  .glass-layout .glass-sections, .glass-layout .tasks-card, .glass-layout .history-card { padding: 16px; }
+  .glass-layout .history-item { grid-template-columns: 14px minmax(0, 1fr) 32px; }
+  .glass-layout .history-duration { grid-column: 2; grid-row: 2; }
+  .glass-layout .history-date { grid-column: 2; grid-row: 3; }
+  .glass-layout .session-delete { grid-column: 3; grid-row: 1 / 4; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass-layout { --glass-panel: var(--color-surface); }
+}

@@ -2,6 +2,7 @@ import type { StudySection } from '../types'
 import { SectionPicker } from './SectionPicker'
 
 type SessionFormProps = {
+    showSectionPicker?: boolean
     showPreview?: boolean
     sections: StudySection[]
     selectedSectionId: string
@@ -13,6 +14,7 @@ type SessionFormProps = {
 }
 
 export function SessionForm({
+    showSectionPicker = true,
     showPreview = true,
     sections,
     selectedSectionId,
@@ -37,12 +39,12 @@ export function SessionForm({
                 onChange={(event) => onSessionNameChange(event.target.value)}
               />
             </label>
-            <SectionPicker
+            {showSectionPicker && <SectionPicker
               sections={sections}
               selectedSectionId={selectedSectionId}
               disabled={isRunning || isSectionPending}
               onSectionChange={onSectionChange}
-            />
+            />}
           </div>
 
           <p className='session-hint' id='session-name-hint'>

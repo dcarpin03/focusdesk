@@ -51,7 +51,7 @@ export function CurrentLayout({ model }: LayoutProps) {
           disabled={isRunning || isSectionPending || !isStorageLoaded}
           onAddSection={handleAddSection}
         />
-        <SettingsPanel theme={theme} onThemeChange={handleThemeChange} error={themeError} />
+        <SettingsPanel layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={theme} onThemeChange={handleThemeChange} error={themeError} />
       </div>
       <main className='app-content'>
         <TimerCard
