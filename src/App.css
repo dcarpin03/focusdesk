@@ -11,7 +11,7 @@
 
 .app-content {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.85fr) minmax(0, 1fr);
   gap: 20px;
 
   flex: 1;
@@ -53,7 +53,7 @@
 .panel-header {
   margin: 0;
   flex-shrink: 0;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
 }
 
 .panel-toggle {
@@ -299,7 +299,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1;
+  flex: 1 1 160px;
   min-width: 0;
   border: 0;
   padding: 8px 0;
@@ -339,16 +339,19 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 18px;
-  margin-bottom: 24px;
+  gap: 16px;
+  min-height: 220px;
+  margin-bottom: 32px;
+  padding: 24px 0;
 }
 
 .timer-clock {
   display: flex;
   align-items: baseline;
   justify-content: center;
-  gap: 20px;
-  font-size: clamp(2.5rem, 4.5vw, 4.5rem);
+  flex-wrap: wrap;
+  gap: 8px clamp(12px, 2vw, 24px);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 600;
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
@@ -384,7 +387,7 @@
   display: flex;
   justify-content: center;
   gap: 18px;
-  margin-bottom: 24px;
+  margin-bottom: 0;
 }
 
 .primary-button,
@@ -419,15 +422,6 @@
   transform: translateY(-1px);
 }
 
-.timer-note {
-  margin: 0;
-  border-radius: 0 0 20px 20px;
-  padding: 18px;
-  background: #f9f1e8;
-  color: #756b62;
-  text-align: center;
-}
-
 .card-icon {
   color: #8c8178;
   font-size: 1.4rem;
@@ -436,8 +430,9 @@
 .task-form {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 22px;
+  flex-shrink: 0;
 }
 
 .task-form input {
@@ -458,7 +453,7 @@
 .task-form button {
   border: 0;
   border-radius: 12px;
-  padding: 0 22px;
+  padding: 0 16px;
   background: #c87943;
   color: #fffaf5;
   font: inherit;
@@ -477,9 +472,9 @@
 
 .task-item {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 14px;
+  gap: 8px;
   padding: 16px 0;
   border-bottom: 1px solid #eee4da;
 }
@@ -500,6 +495,8 @@
 }
 
 .task-status {
+  grid-column: 2;
+  justify-self: start;
   border-radius: 999px;
   padding: 6px 12px;
   font-size: 0.85rem;
@@ -524,6 +521,8 @@
 }
 
 .task-menu {
+  grid-column: 3;
+  grid-row: 1 / span 2;
   width: 32px;
   height: 32px;
   border: 0;
@@ -552,6 +551,7 @@
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
+  padding: clamp(24px, 3vw, 40px);
 }
 
 .timer-card > * {
@@ -564,10 +564,7 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-}
-
-.task-form {
-  flex-shrink: 0;
+  padding: 20px;
 }
 
 .task-list,
@@ -587,9 +584,9 @@
 
 .history-item {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   padding: 14px 0;
   border-bottom: 1px solid #eee4da;
 }
@@ -619,11 +616,14 @@
 }
 
 .history-date {
+  grid-column: 2 / 4;
   color: #756b62;
   white-space: nowrap;
 }
 
 .session-delete {
+  grid-column: 4;
+  grid-row: 1 / span 2;
   width: 32px;
   height: 32px;
   border: 0;
@@ -665,42 +665,7 @@
 }
 
 
-@media (max-width: 1100px) {
-  .session-fields {
-    grid-template-columns: 1fr;
-  }
-
-  .task-item {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: 8px;
-  }
-
-  .task-status {
-    grid-column: 2;
-    justify-self: start;
-  }
-
-  .task-menu {
-    grid-column: 3;
-    grid-row: 1 / span 2;
-  }
-
-  .history-item {
-    grid-template-columns: auto minmax(0, 1fr) auto auto;
-    gap: 8px;
-  }
-
-  .history-date {
-    grid-column: 2 / 4;
-  }
-
-  .session-delete {
-    grid-column: 4;
-    grid-row: 1 / span 2;
-  }
-}
-
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .app {
     height: auto;
     min-height: 100vh;
@@ -712,7 +677,7 @@
   }
 
   .timer-card {
-    min-height: 360px;
+    min-height: 440px;
   }
 
   .side-content-tasks-open {
@@ -729,6 +694,10 @@
 }
 
 @media (max-width: 600px) {
+  .session-fields {
+    grid-template-columns: 1fr;
+  }
+
   .section-form {
     grid-template-columns: minmax(0, 1fr);
     padding: 16px;
@@ -745,7 +714,7 @@
   }
 
   .timer-clock {
-    font-size: clamp(2rem, 7vw, 3rem);
+    font-size: clamp(2rem, 8vw, 3.5rem);
     gap: 10px;
   }
 
