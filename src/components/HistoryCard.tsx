@@ -10,10 +10,11 @@ type HistoryCardProps = {
   activeSectionId: string
   isSectionPending: boolean
   onDeleteSection: (sectionId: string) => Promise<void>
+  onDeleteSession: (sessionId: string) => void
   formatTime: (seconds: number) => string
 }
 
-export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectionId, isSectionPending, onDeleteSection, formatTime }: HistoryCardProps) {
+export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectionId, isSectionPending, onDeleteSection, onDeleteSession, formatTime }: HistoryCardProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set(['unassigned']))
   const [error, setError] = useState('')
   const sectionIds = new Set(sections.map((section) => section.id))
@@ -107,6 +108,18 @@ export function HistoryCard({ isOpen, onToggle, sessions, sections, activeSectio
                       <span className='history-name'>{session.name}</span>
                       <span className='history-duration'>{formatTime(session.durationSeconds)}</span>
                       <span className='history-date'>{session.date}</span>
+                      <button
+                        type='button'
+                        className='session-delete'
+                        aria-label={`Eliminar sesión ${session.name}`}
+                        title='Eliminar sesión'
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          onDeleteSession(session.id)
+                        }}
+                      >
+                        <span aria-hidden='true'>×</span>
+                      </button>
                     </li>
                   ))}
                 </ul>

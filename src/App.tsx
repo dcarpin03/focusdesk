@@ -171,6 +171,17 @@ function App() {
     )
   }
 
+  const handleDeleteSession = (sessionId: string) => {
+    const session = sessions.find((session) => session.id === sessionId)
+    if (!session || !window.confirm(
+      `¿Eliminar la sesión «${session.name}»?\n\nEsta acción eliminará el registro de la sesión del historial.`
+    )) {
+      return
+    }
+
+    setSessions((currentSessions) => currentSessions.filter((session) => session.id !== sessionId))
+  }
+
   const today = new Date().toLocaleDateString('es-ES')
   const totalTodaySeconds = sessions
   .filter((session) => session.date === today)
@@ -218,6 +229,7 @@ function App() {
             activeSectionId={isRunning ? activeSectionId : ''}
             isSectionPending={isSectionPending || !isStorageLoaded}
             onDeleteSection={handleDeleteSection}
+            onDeleteSession={handleDeleteSession}
             formatTime={formatTime}
           />
 
