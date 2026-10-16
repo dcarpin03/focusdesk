@@ -36,12 +36,19 @@ export function TimerCard({
     )
 
     if (variant === 'editorial') {
+        const [hours, minutes, seconds] = formatTime(elapsedSeconds).split(':')
+
         return (
             <section className='timer-card editorial-timer' aria-label='Sesión de estudio'>
                 <div className='timer-display editorial-dial'>
                     <Icon name='leaf' />
-                    <span className='editorial-timer-state'>{isRunning ? 'Estudiando' : 'Tu próximo paso'}</span>
-                    <div className='timer-clock' role='timer' aria-label='Tiempo transcurrido' aria-live='off'>{formatTime(elapsedSeconds)}</div>
+                    <span className='editorial-timer-state'>{isRunning ? 'Estudiando' : 'Listo para estudiar'}</span>
+                    <div className='timer-clock' role='timer' aria-label={`Tiempo transcurrido: ${formatTime(elapsedSeconds)}`} aria-live='off'>
+                        <span className='editorial-hours' aria-hidden='true'><span>{hours}</span><small>h</small></span>
+                        <span className='editorial-main-time' aria-hidden='true'>
+                            <span>{minutes}</span><span className='editorial-time-separator'>:</span><span>{seconds}</span>
+                        </span>
+                    </div>
                     <p className='timer-label'>Tiempo de estudio</p>
                 </div>
                 <div className='editorial-session-card'>
