@@ -71,13 +71,21 @@ La interfaz está dividida en componentes reutilizables:
 
 La lógica del temporizador se encuentra encapsulada en el hook personalizado `useTimer`, que gestiona el tiempo transcurrido y las operaciones de inicio, parada y reinicio.
 
-`useFocusDesk` mantiene una única instancia del estado de sesiones, secciones, tareas y tema, junto con sus acciones, persistencia y cálculo del tiempo diario. Reutiliza `useTimer` sin modificar su funcionamiento. `App.tsx` crea ese modelo una sola vez y se lo pasa al layout seleccionado mediante props.
+`useFocusDesk` mantiene una única instancia del estado de sesiones, secciones, tareas y tema, junto con sus acciones, persistencia y cálculo del tiempo diario. Reutiliza `useTimer` para el Pomodoro. `App.tsx` crea ese modelo una sola vez y se lo pasa a EditorialLayout mediante props.
 
 ### Interfaz
 
 FocusDesk utiliza exclusivamente Editorial Premium con los temas Clásico, Oscuro, Azul y Verde. App mantiene una sola instancia de useFocusDesk; EditorialLayout organiza los componentes y recibe ese modelo. Las preferencias antiguas de layout se ignoran sin borrarlas ni cambiar los datos de estudio.
 
 El fondo predeterminado es un WebP local original. Su procedencia se documenta en [src/assets/editorial/README.md](src/assets/editorial/README.md). La aplicación funciona sin conexión.
+
+### Pomodoro y duración del historial
+
+El temporizador comienza en 25:00 y permite elegir 25, 45 o 50 minutos antes de iniciar. Nombre y sección siguen siendo obligatorios. Durante la sesión se bloquean los tres campos. El aro muestra la proporción real de tiempo restante.
+
+useTimer calcula el tiempo con Date.now(), se actualiza al recuperar foco/visibilidad y captura el tiempo real al finalizar, incluso si el último intervalo se retrasó. Al alcanzar cero guarda la duración objetivo una sola vez; la finalización manual guarda los segundos reales estudiados. Una referencia síncrona impide que botón y efecto de finalización dupliquen el registro. Las sesiones de menos de un segundo no crean registros de duración cero. El reloj vuelve a la duración elegida. Cerrar Electron descarta la sesión activa, sin recuperación automática, sonidos ni descansos.
+
+Las sesiones conservan su modelo original y sus duraciones en segundos. formatDuration presenta el historial y sus totales como «3 min 25 s» o «1 h 15 min»; formatCountdown se reserva para el reloj en MM:SS. No se modifican fechas ni el cálculo diario. Las sesiones registradas antes del Pomodoro siguen disponibles.
 
 ### Persistencia de datos
 

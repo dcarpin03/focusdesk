@@ -7,7 +7,7 @@ import { TasksCard } from '../components/TasksCard'
 import { HistoryCard } from '../components/HistoryCard'
 import { Footer } from '../components/Footer'
 import { Icon } from '../components/Icon'
-import { formatTime } from '../utils/time'
+import { formatDuration } from '../utils/time'
 import type { LayoutProps } from './types'
 import './EditorialLayout.css'
 
@@ -83,7 +83,7 @@ export function EditorialLayout({ model }: LayoutProps) {
               isSectionPending={sectionPending}
               onDeleteSection={model.handleDeleteSection}
               onDeleteSession={model.handleDeleteSession}
-              formatTime={formatTime}
+              formatTime={formatDuration}
             />
           </div>
         </aside>
