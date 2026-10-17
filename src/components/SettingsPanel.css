@@ -25,3 +25,21 @@
 .settings .layout-preview-glass .layout-preview-center::after { border-color: #ae8bff #73baff #73baff #ae8bff; background: #18233d; }
 .settings .theme-options-title { margin: 0; font-size: 14px; font-weight: 600; }
 .settings .settings-save-error { margin: 12px 0 0; }
+
+/* Presentation shared only by the two available layout headers. */
+:is(.editorial-layout, .glass-layout) .layout-navigation { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+:is(.editorial-layout, .glass-layout) .layout-navigation .settings { margin-left: 0; }
+:is(.editorial-layout, .glass-layout) .layout-navigation .settings-trigger { display: inline-flex; align-items: center; justify-content: center; gap: 9px; width: auto; min-height: 40px; height: auto; padding: 9px 14px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--color-label); box-shadow: none; font: 500 14px 'Segoe UI', system-ui, sans-serif; white-space: nowrap; }
+:is(.editorial-layout, .glass-layout) .layout-navigation .settings-trigger svg { width: 19px; height: 19px; flex-shrink: 0; }
+:is(.editorial-layout, .glass-layout) .layout-navigation .settings-trigger:hover,
+:is(.editorial-layout, .glass-layout) .layout-navigation .settings-trigger[aria-expanded='true'] { border-color: var(--color-border); background: var(--color-hover); color: var(--color-accent-text); }
+.editorial-layout .layout-navigation .editorial-current-screen { min-height: 40px; padding: 9px 14px; }
+.glass-layout .glass-current-screen { display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 9px 14px; border: 1px solid #68749c; border-radius: 999px; background: #303750b0; color: var(--color-accent-text); font-size: 14px; font-weight: 600; white-space: nowrap; }
+.glass-layout .glass-current-screen svg { width: 19px; height: 19px; }
+.glass-layout .glass-header-quote { margin: 0 0 0 auto; }
+@media (max-width: 700px) {
+  :is(.editorial-layout, .glass-layout) :is(.editorial-header, .glass-header) { flex-wrap: wrap; gap: 10px 20px; }
+  :is(.editorial-layout, .glass-layout) .layout-navigation { flex-basis: 100%; gap: 6px; }
+  :is(.editorial-layout, .glass-layout) .layout-navigation :is(.settings-trigger, .editorial-current-screen, .glass-current-screen) { min-height: 38px; padding: 8px 10px; gap: 7px; font-size: 13px; }
+  :is(.editorial-layout, .glass-layout) .layout-navigation .settings-panel { top: 142px; max-height: calc(100dvh - 154px); }
+}

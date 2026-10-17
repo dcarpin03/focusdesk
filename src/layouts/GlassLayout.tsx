@@ -21,8 +21,11 @@ export function GlassLayout({ model }: LayoutProps) {
           <Icon name='leaf' />
           <div><h1>FocusDesk</h1><p>Un espacio para concentrarte.</p></div>
         </div>
+        <div className='layout-navigation' role='group' aria-label='Navegación de estudio'>
+          <span className='glass-current-screen' aria-current='page'><Icon name='study' />Estudio</span>
+          <SettingsPanel triggerLabel='Configuración' layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
+        </div>
         <p className='glass-header-quote'>Un poco de progreso, cada día.</p>
-        <SettingsPanel layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
       </header>
       <main className='glass-content'>
         <aside className='glass-sections' aria-label='Gestión de secciones'>
@@ -30,7 +33,7 @@ export function GlassLayout({ model }: LayoutProps) {
             <h2><Icon name='folder' />Tu espacio de estudio</h2>
             <SectionPicker sections={model.sections} selectedSectionId={model.selectedSectionId} disabled={model.isRunning || sectionPending} onSectionChange={model.setSelectedSectionId} />
           </div>
-          <SectionForm title='Nueva sección' sections={model.sections} disabled={model.isRunning || sectionPending} onAddSection={model.handleAddSection} />
+          <SectionForm title='Crear nueva sección' icon={<Icon name='folder' />} sections={model.sections} disabled={model.isRunning || sectionPending} onAddSection={model.handleAddSection} />
         </aside>
         <section className='glass-focus' aria-label='Espacio de estudio'>
           <TimerCard variant='glass' elapsedSeconds={model.elapsedSeconds} isRunning={model.isRunning} canStart={model.canStartSession} onStart={model.handleStartTimer} onStop={model.handleStopTimer}

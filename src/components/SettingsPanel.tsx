@@ -6,6 +6,7 @@ import type { AvailableLayoutId } from '../utils/layouts'
 import './SettingsPanel.css'
 
 type SettingsPanelProps = {
+  triggerLabel?: string
   layout: AvailableLayoutId
   onLayoutChange: (layout: AvailableLayoutId) => void
   layoutError: string
@@ -14,7 +15,7 @@ type SettingsPanelProps = {
   error: string
 }
 
-export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutChange, layoutError }: SettingsPanelProps) {
+export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutChange, layoutError, triggerLabel }: SettingsPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLElement>(null)
@@ -55,7 +56,7 @@ export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutCha
         type='button'
         className='settings-trigger'
         ref={triggerRef}
-        aria-label='Abrir ajustes'
+        aria-label={triggerLabel ? `${triggerLabel}: abrir ajustes` : 'Abrir ajustes'}
         aria-expanded={isOpen}
         aria-controls='settings-panel'
         onClick={() => isOpen ? closePanel() : setIsOpen(true)}
@@ -64,6 +65,7 @@ export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutCha
           <path d='M10 2h4l.6 2.8 2 .9 2.5-1.2 2 3.5-2 1.9.2 2.2 2.1 1.8-2 3.5-2.6-.9-1.9 1.1L14 22h-4l-.7-2.6-1.9-1.1-2.6.9-2-3.5L4.9 14l.2-2.2-2-1.9 2-3.5 2.5 1.2 2-.9L10 2Z' />
           <circle cx='12' cy='12' r='3' />
         </svg>
+        {triggerLabel && <span>{triggerLabel}</span>}
       </button>
       <section className='settings-panel' id='settings-panel' aria-labelledby='settings-title' ref={panelRef} hidden={!isOpen}>
         <div className='settings-heading'>

@@ -17,9 +17,11 @@ export function EditorialLayout({ model }: LayoutProps) {
     <div className='app editorial-layout'>
       <header className='editorial-header'>
         <h1 className='editorial-brand'><Icon name='leaf' />FocusDesk</h1>
-        <span className='editorial-current-screen'><Icon name='study' />Estudio</span>
+        <div className='layout-navigation' role='group' aria-label='Navegación de estudio'>
+          <span className='editorial-current-screen' aria-current='page'><Icon name='study' />Estudio</span>
+          <SettingsPanel triggerLabel='Configuración' layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
+        </div>
         <p className='editorial-header-quote'>Un poco de progreso, cada día.</p>
-        <SettingsPanel layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
       </header>
 
       <main className='editorial-content'>
