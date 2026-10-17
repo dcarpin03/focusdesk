@@ -25,6 +25,13 @@ export function EditorialLayout({ model }: LayoutProps) {
         <p className='editorial-header-quote'>Un poco de progreso, cada día.</p>
       </header>
 
+      {model.storageError && (
+        <div className='storage-error' role='alert'>
+          <span>{model.storageError} {model.isStorageLoaded && 'No cierres la aplicación hasta que se guarden los cambios.'}</span>
+          {model.isStorageLoaded && <button type='button' onClick={model.retryStorage}>Reintentar guardado</button>}
+        </div>
+      )}
+
       <main className='editorial-content'>
         <section className='editorial-focus' aria-label='Espacio de estudio'>
           <div className='editorial-studio' style={{ '--editorial-background-image': model.background.url ? `url("${model.background.url}")` : 'none' } as CSSProperties}>

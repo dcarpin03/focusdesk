@@ -1,4 +1,17 @@
 /* All structural and decorative overrides belong to Editorial only. */
+.storage-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 1px solid var(--color-primary);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.storage-error button { flex-shrink: 0; }
+
 .editorial-layout {
   --editorial-panel: color-mix(in srgb, var(--color-surface) 96%, transparent);
   --editorial-soft-shadow: 0 8px 28px color-mix(in srgb, var(--color-text) 7%, transparent);

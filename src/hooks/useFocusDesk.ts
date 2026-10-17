@@ -41,6 +41,22 @@ export function useFocusDesk(initialTheme: Theme) {
   const [isStorageLoaded, setIsStorageLoaded] = useState(false)
   const [isTasksOpen, setIsTasksOpen] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [loadError, setLoadError] = useState('')
+  const [tasksError, setTasksError] = useState('')
+  const [sessionsError, setSessionsError] = useState('')
+  const [today, setToday] = useState(() => new Date().toLocaleDateString('es-ES'))
+
+  useEffect(() => {
+    const updateDate = () => setToday(new Date().toLocaleDateString('es-ES'))
+    const interval = window.setInterval(updateDate, 1000)
+    window.addEventListener('focus', updateDate)
+    document.addEventListener('visibilitychange', updateDate)
+    return () => {
+      window.clearInterval(interval)
+      window.removeEventListener('focus', updateDate)
+      document.removeEventListener('visibilitychange', updateDate)
+    }
+  }, [])
 
   useEffect(() => {
     const loadStoredData = async () => {
@@ -54,6 +70,7 @@ export function useFocusDesk(initialTheme: Theme) {
         setSections(storedSections)
         setIsStorageLoaded(true)
       } catch(error) {
+        setLoadError('No se pudieron cargar los datos. Reinicia la aplicación antes de hacer cambios; los datos guardados no se han sobrescrito.')
         console.error('Error al cargar los datos de FocusDesk:', error)
       }
 
@@ -67,7 +84,8 @@ export function useFocusDesk(initialTheme: Theme) {
       return
     }
 
-    window.focusDeskStorage.setTasks(tasks).catch((error) => {
+    window.focusDeskStorage.setTasks(tasks).then(() => setTasksError('')).catch((error) => {
+      setTasksError('No se pudieron guardar las tareas.')
       console.error('Error al guardar las tareas:', error)
     })
   }, [tasks, isStorageLoaded])
@@ -77,7 +95,8 @@ export function useFocusDesk(initialTheme: Theme) {
       return
     }
 
-    window.focusDeskStorage.setSessions(sessions).catch((error) => {
+    window.focusDeskStorage.setSessions(sessions).then(() => setSessionsError('')).catch((error) => {
+      setSessionsError('No se pudo guardar el historial de sesiones.')
       console.error('Error al guardar las sesiones:', error)
     })
   }, [sessions, isStorageLoaded])
@@ -155,6 +174,7 @@ export function useFocusDesk(initialTheme: Theme) {
 
   const handleAddTask = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!isStorageLoaded) return
 
     if(taskTitle.trim() === ''){
       return
@@ -171,6 +191,7 @@ export function useFocusDesk(initialTheme: Theme) {
   }
 
   const handleToggleTask = (taskId: string) => {
+    if (!isStorageLoaded) return
     setTasks((currentTasks) =>
       currentTasks.map((task) =>
         task.id === taskId ? {...task, completed: !task.completed } : task
@@ -179,12 +200,14 @@ export function useFocusDesk(initialTheme: Theme) {
   }
 
   const handleDeleteTask = (taskId: string) => {
+    if (!isStorageLoaded) return
     setTasks((currentTasks) =>
       currentTasks.filter((task) => task.id !== taskId)
     )
   }
 
   const handleDeleteSession = (sessionId: string) => {
+    if (!isStorageLoaded) return
     const session = sessions.find((session) => session.id === sessionId)
     if (!session || !window.confirm(
       `¿Eliminar la sesión «${session.name}»?\n\nEsta acción eliminará el registro de la sesión del historial.`
@@ -195,7 +218,13 @@ export function useFocusDesk(initialTheme: Theme) {
     setSessions((currentSessions) => currentSessions.filter((session) => session.id !== sessionId))
   }
 
-  const today = new Date().toLocaleDateString('es-ES')
+  const retryStorage = () => {
+    // Retry the current in-memory data without discarding unsaved changes.
+    if (!isStorageLoaded) return
+    setTasks((current) => [...current])
+    setSessions((current) => [...current])
+  }
+
   const totalTodaySeconds = sessions
   .filter((session) => session.date === today)
   .reduce((total, session) => total + session.durationSeconds, 0)
@@ -204,6 +233,8 @@ export function useFocusDesk(initialTheme: Theme) {
     !isSectionPending && isStorageLoaded
 
   return {
+    storageError: loadError || [tasksError, sessionsError].filter(Boolean).join(' '),
+    retryStorage,
     background,
     theme,
     themeError,
