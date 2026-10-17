@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build output and private configuration
+dist-electron/
+release/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
