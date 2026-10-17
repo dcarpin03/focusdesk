@@ -1,20 +1,8 @@
 import { useEffect, useState } from 'react'
 import type { StudySection, StudySession, Task, Theme } from '../types'
 import { useTimer } from './useTimer'
-import type { AvailableLayoutId } from '../utils/layouts'
 
-export function useFocusDesk(initialTheme: Theme, initialLayout: AvailableLayoutId) {
-  const [layout, setLayout] = useState(initialLayout)
-  const [layoutError, setLayoutError] = useState('')
-
-  const handleLayoutChange = (nextLayout: AvailableLayoutId) => {
-    setLayout(nextLayout)
-    setLayoutError('')
-    window.focusDeskStorage.setLayout(nextLayout).catch(() => {
-      setLayoutError('No se pudo guardar el diseño. Se aplicará solo durante esta ejecución.')
-    })
-  }
-
+export function useFocusDesk(initialTheme: Theme) {
   const [theme, setTheme] = useState<Theme>(initialTheme)
   const [themeError, setThemeError] = useState('')
 
@@ -211,9 +199,6 @@ export function useFocusDesk(initialTheme: Theme, initialLayout: AvailableLayout
     !isSectionPending && isStorageLoaded
 
   return {
-    layout,
-    layoutError,
-    handleLayoutChange,
     theme,
     themeError,
     handleThemeChange,

@@ -73,31 +73,11 @@ La lógica del temporizador se encuentra encapsulada en el hook personalizado `u
 
 `useFocusDesk` mantiene una única instancia del estado de sesiones, secciones, tareas y tema, junto con sus acciones, persistencia y cálculo del tiempo diario. Reutiliza `useTimer` sin modificar su funcionamiento. `App.tsx` crea ese modelo una sola vez y se lo pasa al layout seleccionado mediante props.
 
-### Diseños visuales
+### Interfaz
 
-`src/layouts/types.ts` define los seis identificadores de diseño y el contrato `LayoutProps`. `src/layouts/layoutConfig.ts` centraliza sus nombres y resuelve el componente correspondiente. El diseño interno predeterminado es `editorial`, implementado en `EditorialLayout`. Glass Nocturno está implementado en `GlassLayout`. Ajustes → Apariencia → Diseño de interfaz permite elegir entre ambos con miniaturas CSS de su distribución. Los otros cuatro diseños siguen pendientes, no se ofrecen en Ajustes y utilizan `CurrentLayout` como respaldo interno.
+FocusDesk utiliza exclusivamente Editorial Premium con los temas Clásico, Oscuro, Azul y Verde. App mantiene una sola instancia de useFocusDesk; EditorialLayout organiza los componentes y recibe ese modelo. Las preferencias antiguas de layout se ignoran sin borrarlas ni cambiar los datos de estudio.
 
-Los layouts organizan la presentación y reciben el mismo modelo; no deben crear otra instancia de `useFocusDesk`, leer directamente el almacenamiento ni duplicar acciones de negocio. Los estados locales de presentación, como los grupos abiertos del historial o la apertura de ajustes, pueden seguir en sus componentes. Al cambiar de diseño se desmontan esos componentes y dichos estados locales se reinician; los datos de estudio y el cronómetro permanecerán en `App` a través del hook compartido.
-
-Para incorporar nuevas variantes:
-
-1. Crear un componente que reciba `LayoutProps` y registrar su `component` en la entrada correspondiente de `LAYOUTS`.
-2. Reorganizar los componentes existentes utilizando los datos y acciones de `model`. `TimerCard` acepta un `sessionForm` opcional y las presentaciones anterior, Editorial y Glass; todas comparten los mismos controles y acciones.
-3. Consumir `elapsedSeconds`, `isRunning`, `canStartSession`, `handleStartTimer` y `handleStopTimer` del mismo modelo para presentar el cronómetro sin duplicar su lógica.
-
-Los temas y diseños son independientes: `data-theme` y `src/themes.css` siguen controlando la paleta. Los estilos de Editorial se limitan a `.editorial-layout` en `EditorialLayout.css`, reutilizan las variables semánticas y no sobrescriben las preferencias. Los estilos de `App.css` continúan disponibles para la presentación anterior.
-
-Editorial incorpora una cabecera con identidad y ajustes, cronómetro circular y tarjeta de sesión sobre un fondo ambiental, resumen diario y columna de secciones, tareas e historial. El círculo muestra el tiempo ascendente real en `HH:MM:SS`; su aro completo es decorativo y no representa progreso ni un objetivo. Las tareas muestran el número real de completadas y el historial suma la duración de cada sección, sin nuevos datos almacenados.
-
-El fondo es un WebP local original generado para el proyecto (aproximadamente 110 KB), con degradado CSS de respaldo. Su procedencia y el prompt están documentados en [src/assets/editorial/README.md](src/assets/editorial/README.md). La interfaz funciona sin conexión y conserva la barra nativa de Electron. En ventanas estrechas se apila verticalmente; las listas mantienen scroll independiente. Los paneles conservan su comportamiento desplegable y su estado inicial cerrado.
-
-Los temas se definen mediante variables semánticas en `src/themes.css` y el atributo `data-theme` del documento. Las mismas clases CSS se reutilizan en los cuatro temas.
-
-Glass distribuye secciones a la izquierda, cronómetro y resumen diario en el centro, y tareas e historial a la derecha. En ventanas medianas la organización pasa a dos columnas y en estrechas se apila con scroll vertical. Sus estilos están limitados a `.glass-layout` en `GlassLayout.css`; los tokens semánticos locales mantienen una paleta nocturna violeta y azul con cualquier tema guardado. Cambiar de diseño no modifica `theme`: al volver a Editorial se recupera visualmente su paleta. Las miniaturas de temas conservan sus propios colores.
-
-El fondo provisional de Glass se construye exclusivamente con degradados y siluetas CSS locales originales, sin imágenes ni recursos externos que licenciar. Queda pendiente incorporar, si se desea, una fotografía o ilustración ambiental nocturna con licencia verificable para redistribución. No se utiliza el mockup como fondo.
-
-El cambio es inmediato y conserva el tiempo transcurrido, el nombre y la sección activos en la única instancia de `useFocusDesk` / `useTimer`. Puede finalizarse la sesión desde cualquiera de los dos diseños. Ajustes se cierra al cambiar y `App` devuelve el foco al botón de ajustes del nuevo layout. Las tareas y los paneles abiertos pertenecen al estado compartido; los grupos expandidos, los borradores de nueva sección y los errores locales se reinician al desmontar sus componentes.
+El fondo predeterminado es un WebP local original. Su procedencia se documenta en [src/assets/editorial/README.md](src/assets/editorial/README.md). La aplicación funciona sin conexión.
 
 ### Persistencia de datos
 
@@ -108,8 +88,6 @@ Cada sesión nueva conserva el identificador de la sección seleccionada al inic
 Las secciones creadas antes de incorporar los colores reciben el azul predeterminado al cargarse. Esta actualización conserva sus identificadores, nombres y sesiones asociadas.
 
 La preferencia de apariencia se guarda en la clave `theme` de `electron-store` mediante operaciones IPC limitadas a leer y guardar un tema válido. Se carga antes de montar React, sin sobrescribirla durante la inicialización. Si no existe o contiene un valor desconocido, se utiliza Clásico.
-
-La preferencia independiente `layout` usa la misma instancia de electron-store, con los canales limitados `settings:get-layout` y `settings:set-layout`. Solo se pueden guardar `editorial` y `glass`; un valor ausente, desconocido o todavía no implementado se interpreta como Editorial. Se carga antes de montar React y solo se escribe al cambiar de diseño, sin efectos de guardado durante la carga inicial ni cambios en los registros de estudio.
 
 La comunicación entre React y el proceso principal de Electron se realiza mediante IPC (*Inter-Process Communication*).
 

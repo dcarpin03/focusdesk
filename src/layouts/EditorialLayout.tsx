@@ -19,7 +19,7 @@ export function EditorialLayout({ model }: LayoutProps) {
         <h1 className='editorial-brand'><Icon name='leaf' />FocusDesk</h1>
         <div className='layout-navigation' role='group' aria-label='Navegación de estudio'>
           <span className='editorial-current-screen' aria-current='page'><Icon name='study' />Estudio</span>
-          <SettingsPanel triggerLabel='Configuración' layout={model.layout} onLayoutChange={model.handleLayoutChange} layoutError={model.layoutError} theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
+          <SettingsPanel triggerLabel='Configuración' theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
         </div>
         <p className='editorial-header-quote'>Un poco de progreso, cada día.</p>
       </header>
@@ -33,7 +33,6 @@ export function EditorialLayout({ model }: LayoutProps) {
               <i />
             </div>
             <TimerCard
-              variant='editorial'
               elapsedSeconds={model.elapsedSeconds}
               isRunning={model.isRunning}
               canStart={model.canStartSession}
@@ -53,7 +52,7 @@ export function EditorialLayout({ model }: LayoutProps) {
               }
             />
           </div>
-          <Footer variant='editorial' totalTodaySeconds={model.totalTodaySeconds} />
+          <Footer totalTodaySeconds={model.totalTodaySeconds} />
         </section>
 
         <aside className='editorial-sidebar' aria-label='Organización del estudio'>

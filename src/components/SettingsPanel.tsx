@@ -1,21 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Theme } from '../types'
 import { THEMES } from '../utils/themes'
-import { AVAILABLE_LAYOUTS } from '../utils/layouts'
-import type { AvailableLayoutId } from '../utils/layouts'
 import './SettingsPanel.css'
 
 type SettingsPanelProps = {
   triggerLabel?: string
-  layout: AvailableLayoutId
-  onLayoutChange: (layout: AvailableLayoutId) => void
-  layoutError: string
   theme: Theme
   onThemeChange: (theme: Theme) => void
   error: string
 }
 
-export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutChange, layoutError, triggerLabel }: SettingsPanelProps) {
+export function SettingsPanel({ theme, onThemeChange, error, triggerLabel }: SettingsPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLElement>(null)
@@ -74,22 +69,6 @@ export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutCha
         </div>
         <fieldset className='theme-options'>
           <legend>Apariencia</legend>
-          <fieldset className='layout-options'>
-            <legend>Diseño de interfaz</legend>
-            <div className='layout-choices'>
-              {AVAILABLE_LAYOUTS.map((option) => (
-                <label className='layout-option' key={option.id} data-selected={layout === option.id}>
-                  <input type='radio' name='interface-layout' value={option.id} checked={layout === option.id} onChange={() => onLayoutChange(option.id)} />
-                  <span className='layout-option-name'>{option.name}</span>
-                  <span className={`layout-preview layout-preview-${option.id}`} aria-hidden='true'>
-                    <i className='layout-preview-left' /><i className='layout-preview-center' /><i className='layout-preview-right' />
-                  </span>
-                  <span className='layout-status'>{layout === option.id ? 'Seleccionado' : 'Seleccionar'}</span>
-                </label>
-              ))}
-            </div>
-            <p>El cambio cierra Ajustes. Tu sesión continúa.</p>
-          </fieldset>
           <h3 className='theme-options-title'>Tema de color</h3>
           <p>Personaliza los colores de FocusDesk.</p>
           {THEMES.map((option) => (
@@ -105,7 +84,6 @@ export function SettingsPanel({ theme, onThemeChange, error, layout, onLayoutCha
           ))}
         </fieldset>
         {error && <p className='section-error' role='alert'>{error}</p>}
-        {layoutError && <p className='section-error settings-save-error' role='alert'>{layoutError}</p>}
       </section>
     </div>
   )
