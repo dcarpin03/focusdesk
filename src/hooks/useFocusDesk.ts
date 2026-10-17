@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import type { StudySection, StudySession, Task, Theme } from '../types'
+import { useBackground } from './useBackground'
 import { useTimer } from './useTimer'
 
 export function useFocusDesk(initialTheme: Theme) {
+  const background = useBackground()
   const [theme, setTheme] = useState<Theme>(initialTheme)
   const [themeError, setThemeError] = useState('')
 
@@ -202,6 +204,7 @@ export function useFocusDesk(initialTheme: Theme) {
     !isSectionPending && isStorageLoaded
 
   return {
+    background,
     theme,
     themeError,
     handleThemeChange,

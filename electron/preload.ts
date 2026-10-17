@@ -2,6 +2,9 @@ import { ipcRenderer, contextBridge } from 'electron'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('focusDeskStorage', {
+  getBackground: () => ipcRenderer.invoke('background:get'),
+  importBackground: () => ipcRenderer.invoke('background:import'),
+  resetBackground: () => ipcRenderer.invoke('background:reset'),
   getTheme: () => ipcRenderer.invoke('settings:get-theme'),
   setTheme: (theme: string) => ipcRenderer.invoke('settings:set-theme', theme),
   getSections: () => ipcRenderer.invoke('storage:get-sections'),

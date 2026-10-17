@@ -89,6 +89,10 @@ Las secciones creadas antes de incorporar los colores reciben el azul predetermi
 
 La preferencia de apariencia se guarda en la clave `theme` de `electron-store` mediante operaciones IPC limitadas a leer y guardar un tema válido. Se carga antes de montar React, sin sobrescribirla durante la inicialización. Si no existe o contiene un valor desconocido, se utiliza Clásico.
 
+En Ajustes → Fondo ambiental se puede importar JPG, PNG o WebP (máximo 10 MB y 30 megapíxeles) o restablecer el fondo original. Electron abre el selector nativo, valida la firma y decodifica la imagen antes de guardar una copia con nombre UUID dentro de `app.getPath('userData')/backgrounds`. La clave `backgroundImage` contiene únicamente ese nombre relativo; no se guardan imágenes en base64 ni rutas de origen.
+
+El protocolo `focusdesk-background://image/current` sirve solo la copia activa validada, sin acceso genérico a archivos. WebP se valida con Chromium en una ventana oculta, aislada y sin Node/preload porque nativeImage de Electron 30 no lo decodifica. Los archivos ausentes o dañados utilizan el fondo predeterminado y muestran un aviso dentro de Ajustes. El restablecimiento limpia la referencia y la copia; no modifica los datos de estudio.
+
 La comunicación entre React y el proceso principal de Electron se realiza mediante IPC (*Inter-Process Communication*).
 
 El archivo `preload.ts` expone una interfaz denominada `focusDeskStorage`, que permite consultar y actualizar los datos almacenados.

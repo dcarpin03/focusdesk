@@ -9,6 +9,7 @@ type StoreSchema = {
   tasks: Task[]
   sessions: StudySession[]
   sections: StoredStudySection[]
+  backgroundImage: unknown
   theme: unknown
 }
 
@@ -17,6 +18,7 @@ export const store = new Store<StoreSchema>({
     tasks: [],
     sessions: [],
     sections: [],
+    backgroundImage: null,
     theme: DEFAULT_THEME
   }
 })

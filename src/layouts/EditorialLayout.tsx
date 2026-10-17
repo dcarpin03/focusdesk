@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { SettingsPanel } from '../components/SettingsPanel'
 import { TimerCard } from '../components/TimerCard'
 import { SessionForm } from '../components/SessionForm'
@@ -19,14 +20,14 @@ export function EditorialLayout({ model }: LayoutProps) {
         <h1 className='editorial-brand'><Icon name='leaf' />FocusDesk</h1>
         <div className='layout-navigation' role='group' aria-label='Navegación de estudio'>
           <span className='editorial-current-screen' aria-current='page'><Icon name='study' />Estudio</span>
-          <SettingsPanel triggerLabel='Configuración' theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
+          <SettingsPanel background={model.background} triggerLabel='Configuración' theme={model.theme} onThemeChange={model.handleThemeChange} error={model.themeError} />
         </div>
         <p className='editorial-header-quote'>Un poco de progreso, cada día.</p>
       </header>
 
       <main className='editorial-content'>
         <section className='editorial-focus' aria-label='Espacio de estudio'>
-          <div className='editorial-studio'>
+          <div className='editorial-studio' style={{ '--editorial-background-image': model.background.url ? `url("${model.background.url}")` : 'none' } as CSSProperties}>
             <TimerCard
               remainingSeconds={model.remainingSeconds}
               durationMinutes={model.durationMinutes}

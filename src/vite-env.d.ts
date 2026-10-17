@@ -1,10 +1,13 @@
 /// <reference types="vite/client" />
 
-import type { Task, StudySession, StudySection, Theme } from './types'
+import type { Task, StudySession, StudySection, Theme, BackgroundResult } from './types'
 
 declare global {
   interface Window {
     focusDeskStorage: {
+      getBackground: () => Promise<BackgroundResult>
+      importBackground: () => Promise<BackgroundResult>
+      resetBackground: () => Promise<BackgroundResult>
       getTheme: () => Promise<Theme>
       setTheme: (theme: Theme) => Promise<void>
       getTasks: () => Promise<Task[]>

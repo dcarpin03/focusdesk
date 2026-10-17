@@ -12,3 +12,14 @@
   .editorial-layout .layout-navigation :is(.settings-trigger, .editorial-current-screen) { min-height: 38px; padding: 8px 10px; gap: 7px; font-size: 13px; }
   .editorial-layout .layout-navigation .settings-panel { top: 142px; max-height: calc(100dvh - 154px); }
 }
+
+.settings .background-settings { min-width: 0; margin: 20px 0 0; padding: 18px 0 0; border: 0; border-top: 1px solid var(--color-border); }
+.settings .background-settings legend { padding: 0; font-weight: 600; }
+.settings .background-settings img { display: block; width: 100%; height: 110px; object-fit: cover; border: 1px solid var(--color-border); border-radius: 12px; margin-top: 12px; }
+.settings .background-settings p { color: var(--color-text-muted); font-size: 12px; line-height: 1.5; }
+.settings .background-settings .section-error { color: var(--color-danger); }
+.settings .background-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.settings .background-actions button { min-height: 36px; border: 1px solid var(--color-input-border); border-radius: 9px; padding: 8px 10px; background: var(--color-hover); color: var(--color-accent-text); font: inherit; font-size: 12px; cursor: pointer; }
+.settings .background-actions button:hover:not(:disabled) { border-color: var(--color-primary); }
+.settings .background-actions button:disabled { opacity: .6; cursor: not-allowed; }
+.settings .theme-options-title { margin: 0; font-size: 14px; font-weight: 600; }

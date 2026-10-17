@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Theme } from '../types'
 import { THEMES } from '../utils/themes'
+import type { useBackground } from '../hooks/useBackground'
+import defaultBackground from '../assets/editorial/study-window.webp'
 import './SettingsPanel.css'
 
 type SettingsPanelProps = {
+  background: ReturnType<typeof useBackground>
   triggerLabel?: string
   theme: Theme
   onThemeChange: (theme: Theme) => void
   error: string
 }
 
-export function SettingsPanel({ theme, onThemeChange, error, triggerLabel }: SettingsPanelProps) {
+export function SettingsPanel({ theme, onThemeChange, error, triggerLabel, background }: SettingsPanelProps) {
   const [isOpen, setIsOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLElement>(null)
@@ -82,6 +85,17 @@ export function SettingsPanel({ theme, onThemeChange, error, triggerLabel }: Set
               </span>
             </label>
           ))}
+        </fieldset>
+        <fieldset className='background-settings'>
+          <legend>Fondo ambiental</legend>
+          <img src={background.url ?? defaultBackground} alt='Fondo ambiental actual' onError={({ currentTarget }) => { if (currentTarget.getAttribute('src') !== defaultBackground) currentTarget.src = defaultBackground }} />
+          <p>JPG, PNG o WebP · Hasta 10 MB y 30 megapíxeles.</p>
+          <div className='background-actions'>
+            <button type='button' disabled={background.isPending} onClick={background.importImage}>Importar imagen</button>
+            <button type='button' disabled={background.isPending} onClick={background.resetImage}>Restablecer fondo</button>
+          </div>
+          {background.isPending && <p role='status'>Cargando fondo…</p>}
+          {background.error && <p className='section-error' role='alert'>{background.error}</p>}
         </fieldset>
         {error && <p className='section-error' role='alert'>{error}</p>}
       </section>

@@ -1,3 +1,4 @@
+import { registerBackgroundHandlers } from './background'
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { fileURLToPath } from 'node:url'
 import { getSections, getTheme, store } from './store'
@@ -122,4 +123,7 @@ app.on('activate', () => {
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  registerBackgroundHandlers()
+  createWindow()
+})
