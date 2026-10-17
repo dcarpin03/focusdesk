@@ -86,15 +86,23 @@ ipcMain.handle('storage:delete-section', (_event, sectionId: string) => {
 
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    title: 'FocusDesk',
+    width: 1440,
+    height: 960,
+    minWidth: 360,
+    minHeight: 480,
+    icon: path.join(process.env.VITE_PUBLIC, 'focusdesk.png'),
     webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
       preload: path.join(__dirname, 'preload.mjs'),
     },
   })
 
-  // Test active push message to Renderer-process.
-  win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', (new Date).toLocaleString())
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  win.webContents.on('will-navigate', (event, url) => {
+    if (url !== win?.webContents.getURL()) event.preventDefault()
   })
 
   if (VITE_DEV_SERVER_URL) {
@@ -124,6 +132,7 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
+  app.setAppUserModelId('io.github.dcarpin03.focusdesk')
   registerBackgroundHandlers()
   createWindow()
 })

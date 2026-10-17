@@ -1,23 +1,19 @@
-// @see - https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
+  "appId": "io.github.dcarpin03.focusdesk",
+  "productName": "FocusDesk",
   "asar": true,
-  "productName": "YourAppName",
   "directories": {
-    "output": "release/${version}"
+    "output": "release/${version}",
+    "buildResources": "build"
   },
   "files": [
-    "dist",
-    "dist-electron"
+    "dist/**/*",
+    "dist-electron/**/*",
+    "!**/*.map"
   ],
-  "mac": {
-    "target": [
-      "dmg"
-    ],
-    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
-  },
   "win": {
+    "icon": "build/icon.ico",
     "target": [
       {
         "target": "nsis",
@@ -26,18 +22,16 @@
         ]
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    "artifactName": "${productName}-${version}-Windows-x64-Setup.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
     "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "FocusDesk",
     "deleteAppDataOnUninstall": false
   },
-  "linux": {
-    "target": [
-      "AppImage"
-    ],
-    "artifactName": "${productName}-Linux-${version}.${ext}"
-  }
+  "publish": null
 }
