@@ -19,11 +19,12 @@ export function useFocusDesk(initialTheme: Theme) {
   }
 
   const {
-    elapsedSeconds,
+    remainingSeconds,
+    durationMinutes,
+    changeDuration,
     isRunning,
     startTimer,
-    stopTimer,
-    resetTimer
+    stopTimer
   } = useTimer()
 
   const [sessionName, setSessionName] = useState('')
@@ -94,25 +95,27 @@ export function useFocusDesk(initialTheme: Theme) {
   }
 
   const handleStopTimer = () => {
-    if(!isRunning || elapsedSeconds === 0){
-      return
-    }
+    const studiedSeconds = stopTimer()
+    if (studiedSeconds === null) return
 
-    const newSession: StudySession = {
-      id: crypto.randomUUID(),
-      name: activeSessionName,
-      sectionId: activeSectionId,
-      durationSeconds: elapsedSeconds,
-      date: new Date().toLocaleDateString('es-ES')
+    if (studiedSeconds > 0) {
+      const newSession: StudySession = {
+        id: crypto.randomUUID(),
+        name: activeSessionName,
+        sectionId: activeSectionId,
+        durationSeconds: studiedSeconds,
+        date: new Date().toLocaleDateString('es-ES')
+      }
+      setSessions((currentSessions) => [newSession, ...currentSessions])
     }
-
-    setSessions((currentSessions) => [newSession, ...currentSessions])
-    stopTimer()
-    resetTimer()
     setSessionName('')
     setActiveSessionName('')
     setActiveSectionId('')
   }
+
+  useEffect(() => {
+    if (isRunning && remainingSeconds === 0) handleStopTimer()
+  })
 
   const handleAddSection = async (name: string, color: string) => {
     if (isRunning || isSectionPending || !isStorageLoaded) {
@@ -202,7 +205,9 @@ export function useFocusDesk(initialTheme: Theme) {
     theme,
     themeError,
     handleThemeChange,
-    elapsedSeconds,
+    remainingSeconds,
+    durationMinutes,
+    changeDuration,
     isRunning,
     sessionName,
     setSessionName,

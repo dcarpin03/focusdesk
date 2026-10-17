@@ -33,7 +33,9 @@ export function EditorialLayout({ model }: LayoutProps) {
               <i />
             </div>
             <TimerCard
-              elapsedSeconds={model.elapsedSeconds}
+              remainingSeconds={model.remainingSeconds}
+              durationMinutes={model.durationMinutes}
+              onDurationChange={model.changeDuration}
               isRunning={model.isRunning}
               canStart={model.canStartSession}
               onStart={model.handleStartTimer}

@@ -7,3 +7,7 @@ return [hours, minutes, seconds]
 .map((value) => String(value).padStart(2, '0'))
 .join(':')
 }
+export function formatCountdown(totalSeconds: number) {
+  return [Math.floor(totalSeconds / 60), totalSeconds % 60]
+    .map((value) => String(value).padStart(2, '0')).join(':')
+}

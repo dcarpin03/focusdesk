@@ -141,7 +141,7 @@
   padding: 20px 12px;
   background:
     radial-gradient(circle at 35% 20%, var(--color-surface), var(--color-surface-muted)) padding-box,
-    conic-gradient(from -35deg, var(--editorial-ring-light), var(--color-primary) 28%, var(--editorial-ring-deep) 60%, var(--editorial-ring-light)) border-box;
+    conic-gradient(from 0deg, var(--color-primary) 0deg var(--pomodoro-remaining), var(--color-border) var(--pomodoro-remaining) 360deg) border-box;
   box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-surface) 72%, transparent), 0 12px 32px color-mix(in srgb, var(--color-text) 12%, transparent), inset 0 0 0 2px color-mix(in srgb, var(--color-surface) 80%, transparent);
   color: var(--color-text);
 }
@@ -166,16 +166,6 @@
   text-align: center;
 }
 
-.editorial-layout .editorial-dial .editorial-hours {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-  color: var(--color-text-muted);
-  font-size: clamp(12px, 4cqi, 16px);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-.editorial-layout .editorial-hours small { font: inherit; }
 .editorial-layout .timer-clock .editorial-main-time {
   display: grid;
   grid-template-columns: 2ch 0.45ch 2ch;
@@ -616,3 +606,6 @@ body:has(.editorial-layout),
 
 /* Keep the color group named for assistive technology without a second visual heading. */
 .editorial-layout .section-form .color-palette legend { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+.editorial-layout .pomodoro-duration { max-width: 100%; border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 9px; background: var(--color-hover); color: var(--color-accent-text); font: 500 clamp(10px, 3.5cqi, 13px) 'Segoe UI', system-ui, sans-serif; cursor: pointer; }
+.editorial-layout .pomodoro-duration:disabled { opacity: 1; cursor: not-allowed; }
