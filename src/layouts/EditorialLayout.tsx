@@ -27,11 +27,6 @@ export function EditorialLayout({ model }: LayoutProps) {
       <main className='editorial-content'>
         <section className='editorial-focus' aria-label='Espacio de estudio'>
           <div className='editorial-studio'>
-            <div className='editorial-inspiration' aria-hidden='true'>
-              <span>UN MOMENTO PARA TI</span>
-              <p>Las grandes ideas<br />empiezan con<br />un pequeño paso.</p>
-              <i />
-            </div>
             <TimerCard
               remainingSeconds={model.remainingSeconds}
               durationMinutes={model.durationMinutes}

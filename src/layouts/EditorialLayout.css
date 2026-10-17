@@ -113,7 +113,6 @@
   background: linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 22%, transparent), color-mix(in srgb, var(--color-background) 12%, transparent)), url('../assets/editorial/study-window.webp') center / cover;
 }
 
-.editorial-layout .editorial-inspiration { display: none; }
 
 .editorial-layout .timer-card.editorial-timer {
   align-items: center;
@@ -550,10 +549,6 @@
 
 @media (min-width: 1500px) {
   .editorial-layout { padding: 22px 28px; }
-  .editorial-layout .editorial-inspiration { position: absolute; display: block; left: 20px; top: 48px; width: 160px; padding: 14px; border-radius: 12px; color: #4c3525; background: #fff2dcdd; }
-  .editorial-layout .editorial-inspiration span { font-size: 8px; letter-spacing: 1px; }
-  .editorial-layout .editorial-inspiration p { margin: 12px 0 16px; font: 18px/1.4 Georgia, serif; }
-  .editorial-layout .editorial-inspiration i { display: block; width: 28px; height: 2px; background: #a95f2f; }
 }
 
 /* Override the legacy 320px document minimum only while Editorial is mounted. */
@@ -609,3 +604,7 @@ body:has(.editorial-layout),
 
 .editorial-layout .pomodoro-duration { max-width: 100%; border: 1px solid var(--color-border); border-radius: 999px; padding: 6px 9px; background: var(--color-hover); color: var(--color-accent-text); font: 500 clamp(10px, 3.5cqi, 13px) 'Segoe UI', system-ui, sans-serif; cursor: pointer; }
 .editorial-layout .pomodoro-duration:disabled { opacity: 1; cursor: not-allowed; }
+
+.editorial-layout .section-select-control { position: relative; display: block; min-width: 0; }
+.editorial-layout .field .section-select-control select { width: 100%; padding-left: 33px; }
+.editorial-layout .section-selected-color { position: absolute; z-index: 1; left: 12px; top: 50%; transform: translateY(-50%); width: 13px; height: 13px; border: 1px solid var(--color-text-muted); border-radius: 50%; pointer-events: none; }
