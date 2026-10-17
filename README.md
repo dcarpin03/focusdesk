@@ -1,164 +1,103 @@
 # FocusDesk
 
-**Aplicación de escritorio para la gestión de tareas y sesiones de estudio o trabajo.**
+Aplicación de escritorio para organizar el estudio en bloques de concentración, gestionar tareas y consultar el tiempo dedicado a cada sección. Funciona localmente, sin cuenta, servidor ni conexión a Internet.
 
-FocusDesk es un proyecto personal desarrollado con **Electron, React y TypeScript**, cuyo objetivo es proporcionar una herramienta sencilla para organizar tareas, registrar el tiempo dedicado a diferentes actividades y consultar un historial de sesiones.
+Proyecto de portfolio centrado en una interfaz clara, separación entre React y Electron y persistencia local. **Versión candidata: 1.0.0; pendiente de aprobación para su primera publicación.**
 
-La aplicación funciona localmente y utiliza almacenamiento persistente, sin necesidad de disponer de un servidor o una base de datos externa.
-
-**Estado:** Prototipo funcional en desarrollo.
+![FocusDesk: sesión Pomodoro en Editorial Premium](docs/screenshots/focusdesk.png)
 
 ## Funcionalidades
 
-### Cronómetro de sesiones
+- **Pomodoro de 25, 45 o 50 minutos.** Nombre y sección obligatorios; controles bloqueados durante la sesión. Finalización automática o anticipada con registro del tiempo estudiado y protección frente a duplicados.
+- **Secciones personalizadas** con nombre y uno de seis colores. Solo se pueden eliminar si están vacías y sin una sesión activa.
+- **Tareas:** creación, marcado como completadas o pendientes y eliminación, en un panel desplegable con scroll independiente.
+- **Historial por secciones:** grupos desplegables, nombre, fecha y duración legible; eliminación individual con confirmación y total diario actualizado. Las sesiones antiguas sin sección siguen en «Sin sección».
+- **Editorial Premium:** cuatro temas (Clásico, Oscuro, Azul y Verde), diseño adaptable y ajustes junto a Estudio. No existe selector de diseños.
+- **Fondos personalizados:** JPG, PNG o WebP de hasta 10 MB y 30 megapíxeles. Importación, vista previa y restablecimiento del fondo original.
+- **Persistencia local:** tareas, sesiones, secciones, tema e imágenes importadas se conservan al reiniciar.
 
-- Iniciar y detener sesiones de trabajo o estudio.
-- Asignar un nombre a cada sesión.
-- Registrar la duración y fecha de las sesiones.
-- Reiniciar el temporizador al finalizar una sesión.
+## Tecnologías y estructura
 
-### Gestión de tareas
+Electron, React 18, TypeScript, Vite, electron-store, CSS y electron-builder con NSIS. No hay servicios externos ni base de datos remota.
 
-- Crear nuevas tareas.
-- Marcar tareas como completadas o pendientes.
-- Eliminar tareas.
-- Conservar las tareas al cerrar y volver a abrir la aplicación.
+```text
+electron/          Ventana, IPC, almacenamiento e importación de imágenes
+src/components/    Temporizador, formularios, tareas, historial y ajustes
+src/hooks/         Estado de la aplicación, Pomodoro y fondo
+src/layouts/       Composición de Editorial Premium
+src/utils/         Formato de tiempo, temas y colores
+build/             Icono vectorial y archivo ICO multirresolución
+public/            Icono PNG de la ventana
+```
 
-### Historial
+`useFocusDesk` mantiene el estado compartido; `useTimer` calcula el tiempo a partir del instante de inicio y actualiza el reloj al recuperar foco. El preload expone operaciones concretas, sin acceso genérico a IPC o archivos. El renderer tiene `contextIsolation` y sandbox activados, con Node.js deshabilitado. La compilación de producción incluye una política de seguridad de contenido y recursos locales.
 
-- Registrar las sesiones realizadas.
-- Consultar su nombre, duración y fecha.
-- Crear secciones personalizadas y seleccionarlas antes de iniciar una sesión.
-- Elegir uno de seis colores para identificar cada sección en el historial.
-- Expandir y contraer las secciones para consultar sus sesiones.
-- Eliminar únicamente secciones vacías y sin una sesión en curso.
-- Conservar las sesiones antiguas en el grupo «Sin sección».
-- Mantener el historial mediante almacenamiento local.
+## Desarrollo
 
-### Apariencia
-
-- Abrir ajustes desde el engranaje de la parte superior derecha.
-- Elegir entre Clásico, Oscuro, Azul y Verde con una vista previa de sus colores.
-- Aplicar el tema al instante y conservarlo al reiniciar.
-- Mantener los colores personalizados de las secciones en todos los temas.
-
-## Tecnologías utilizadas
-
-| Tecnología | Utilización |
-|---|---|
-| Electron | Desarrollo de la aplicación de escritorio |
-| React | Construcción de la interfaz mediante componentes |
-| TypeScript | Tipado estático |
-| Vite | Entorno de desarrollo y compilación |
-| electron-store | Persistencia local de datos |
-| CSS | Estilos de la interfaz |
-| Git | Control de versiones |
-
-## Arquitectura
-
-FocusDesk utiliza una arquitectura que separa la interfaz gráfica, la lógica del temporizador y el almacenamiento local.
-
-La interfaz está dividida en componentes reutilizables:
-
-- `TimerCard`: interfaz del cronómetro.
-- `SessionForm`: nombre obligatorio y selección de sección, reutilizable dentro o fuera de la tarjeta del cronómetro.
-- `SectionForm`: creación de secciones con nombre y color.
-- `SectionPicker`: selección de la sección de una sesión.
-- `TasksCard`: gestión visual de las tareas.
-- `HistoryCard`: historial de sesiones.
-- `Footer`: pie de la aplicación.
-- `SettingsPanel`: ajustes de apariencia accesibles con ratón y teclado.
-
-La lógica del temporizador se encuentra encapsulada en el hook personalizado `useTimer`, que gestiona el tiempo transcurrido y las operaciones de inicio, parada y reinicio.
-
-`useFocusDesk` mantiene una única instancia del estado de sesiones, secciones, tareas y tema, junto con sus acciones, persistencia y cálculo del tiempo diario. Reutiliza `useTimer` para el Pomodoro. `App.tsx` crea ese modelo una sola vez y se lo pasa a EditorialLayout mediante props.
-
-### Interfaz
-
-FocusDesk utiliza exclusivamente Editorial Premium con los temas Clásico, Oscuro, Azul y Verde. App mantiene una sola instancia de useFocusDesk; EditorialLayout organiza los componentes y recibe ese modelo. Las preferencias antiguas de layout se ignoran sin borrarlas ni cambiar los datos de estudio.
-
-El fondo predeterminado es un WebP local original. Su procedencia se documenta en [src/assets/editorial/README.md](src/assets/editorial/README.md). La aplicación funciona sin conexión.
-
-### Pomodoro y duración del historial
-
-El temporizador comienza en 25:00 y permite elegir 25, 45 o 50 minutos antes de iniciar. Nombre y sección siguen siendo obligatorios. Durante la sesión se bloquean los tres campos. El aro muestra la proporción real de tiempo restante.
-
-useTimer calcula el tiempo con Date.now(), se actualiza al recuperar foco/visibilidad y captura el tiempo real al finalizar, incluso si el último intervalo se retrasó. Al alcanzar cero guarda la duración objetivo una sola vez; la finalización manual guarda los segundos reales estudiados. Una referencia síncrona impide que botón y efecto de finalización dupliquen el registro. Las sesiones de menos de un segundo no crean registros de duración cero. El reloj vuelve a la duración elegida. Cerrar Electron descarta la sesión activa, sin recuperación automática, sonidos ni descansos.
-
-Las sesiones conservan su modelo original y sus duraciones en segundos. formatDuration presenta el historial y sus totales como «3 min 25 s» o «1 h 15 min»; formatCountdown se reserva para el reloj en MM:SS. No se modifican fechas ni el cálculo diario. Las sesiones registradas antes del Pomodoro siguen disponibles.
-
-### Persistencia de datos
-
-La aplicación utiliza `electron-store` para almacenar las tareas, sesiones y secciones.
-
-Cada sesión nueva conserva el identificador de la sección seleccionada al iniciarla. Las sesiones anteriores, sin ese identificador, siguen disponibles en «Sin sección» sin necesidad de migrarlas. Electron comprueba que una sección no contiene sesiones antes de permitir su eliminación; esta operación nunca elimina sesiones.
-
-Las secciones creadas antes de incorporar los colores reciben el azul predeterminado al cargarse. Esta actualización conserva sus identificadores, nombres y sesiones asociadas.
-
-La preferencia de apariencia se guarda en la clave `theme` de `electron-store` mediante operaciones IPC limitadas a leer y guardar un tema válido. Se carga antes de montar React, sin sobrescribirla durante la inicialización. Si no existe o contiene un valor desconocido, se utiliza Clásico.
-
-En Ajustes → Fondo ambiental se puede importar JPG, PNG o WebP (máximo 10 MB y 30 megapíxeles) o restablecer el fondo original. Electron abre el selector nativo, valida la firma y decodifica la imagen antes de guardar una copia con nombre UUID dentro de `app.getPath('userData')/backgrounds`. La clave `backgroundImage` contiene únicamente ese nombre relativo; no se guardan imágenes en base64 ni rutas de origen.
-
-El protocolo `focusdesk-background://image/current` sirve solo la copia activa validada, sin acceso genérico a archivos. WebP se valida con Chromium en una ventana oculta, aislada y sin Node/preload porque nativeImage de Electron 30 no lo decodifica. Los archivos ausentes o dañados utilizan el fondo predeterminado y muestran un aviso dentro de Ajustes. El restablecimiento limpia la referencia y la copia; no modifica los datos de estudio.
-
-La comunicación entre React y el proceso principal de Electron se realiza mediante IPC (*Inter-Process Communication*).
-
-El archivo `preload.ts` expone una interfaz denominada `focusDeskStorage`, que permite consultar y actualizar los datos almacenados.
-
-De esta manera, se separa la interfaz de usuario de las operaciones de persistencia.
-
-## Instalación y ejecución
-
-Para ejecutar el proyecto en local es necesario tener instalados Node.js y npm.
-
-**1. Clonar el repositorio**
+Requisitos: **Node.js 22.12 o superior**, npm y Git. Para generar el instalador indicado se utiliza Windows de 64 bits.
 
 ```bash
 git clone https://github.com/dcarpin03/focusdesk.git
-```
-
-**2. Acceder al directorio**
-
-```bash
 cd focusdesk
-```
-
-**3. Instalar las dependencias**
-
-```bash
-npm install
-```
-
-**4. Iniciar la aplicación en modo desarrollo**
-
-```bash
+npm ci
 npm run dev
 ```
 
-Este comando inicia el entorno de desarrollo de Vite con la integración de Electron.
+`npm run dev` inicia Vite y abre Electron. `npm run preview` permite inspeccionar el frontend compilado, pero no sustituye a Electron: el almacenamiento y los ajustes necesitan el preload.
 
-## Capturas de pantalla
+```bash
+npm run typecheck
+npm run lint
+npm run build:app
+npm run build
+```
 
-*Pendiente de incorporar capturas de la aplicación.*
+- `typecheck`: TypeScript sin emitir archivos.
+- `lint`: ESLint, sin advertencias permitidas.
+- `build:app`: compila el frontend y los procesos principal/preload, sin instalador.
+- `build`: realiza lo anterior y genera NSIS x64, sin publicar artefactos.
 
-Se añadirán imágenes de la pantalla principal, la gestión de tareas y el historial de sesiones.
+El instalador se escribe en:
 
-## Posibles mejoras
+```text
+release/1.0.0/FocusDesk-1.0.0-Windows-x64-Setup.exe
+```
 
-El proyecto puede ampliarse con nuevas funcionalidades:
+La carpeta `release/1.0.0/win-unpacked/` permite comprobar la aplicación empaquetada antes de instalarla. Ambas salidas están excluidas de Git. La aplicación distribuida incorpora su runtime y abre el frontend compilado; no requiere Node.js, npm ni Vite en el equipo de destino.
 
-- Estadísticas de productividad.
-- Resúmenes de tiempo diario y semanal.
-- Edición y categorización de tareas.
-- Filtros para el historial.
-- Intervalos de descanso.
-- Exportación del historial.
-- Empaquetado y distribución de la aplicación.
+## Instalación en Windows
 
-## Objetivo del proyecto
+La distribución objetivo es Windows 10/11 x64. Descarga el instalador únicamente cuando se publique una versión aprobada en [GitHub Releases](https://github.com/dcarpin03/focusdesk/releases); todavía no se enlaza ninguna versión definitiva.
 
-FocusDesk nació como un proyecto personal para profundizar en el desarrollo de aplicaciones de escritorio con tecnologías web modernas.
+1. Ejecuta `FocusDesk-1.0.0-Windows-x64-Setup.exe` y sigue el asistente por usuario.
+2. Elige la carpeta y si quieres crear el acceso directo al escritorio.
+3. Abre FocusDesk desde el menú Inicio o el acceso directo.
+4. Para desinstalar, utiliza Aplicaciones instaladas de Windows. Los datos personales se conservan.
 
-Su desarrollo me ha permitido trabajar con React, TypeScript, gestión de estado, hooks personalizados, comunicación IPC y persistencia local, además de mejorar progresivamente la organización y mantenibilidad del código.
+**El instalador no está firmado digitalmente.** Windows SmartScreen puede mostrar un aviso de editor desconocido. No es necesario desactivar SmartScreen, Defender ni otras protecciones; si Windows bloquea el archivo, comprueba su procedencia y el checksum publicado antes de decidir si ejecutarlo.
 
-El proyecto forma parte de mi portfolio como desarrollador de software.
+## Datos y comportamiento del temporizador
+
+Electron guarda `config.json` y la carpeta `backgrounds` dentro de su directorio de usuario, normalmente `%APPDATA%\focusdesk` en Windows, fuera de la instalación. Para hacer una copia de seguridad, cierra la aplicación y copia esa carpeta completa. No borres los datos para actualizar o reinstalar.
+
+Las sesiones conservan su formato original (`id`, `name`, `durationSeconds`, `date` y `sectionId` opcional). Las secciones antiguas sin color reciben el azul predeterminado sin cambiar sus identificadores. Las preferencias antiguas de diseño se ignoran sin eliminarse.
+
+- La finalización manual guarda segundos completos; menos de un segundo no crea un registro vacío.
+- La finalización automática registra como máximo la duración elegida, incluso si un intervalo se retrasa.
+- La sesión se asigna a la **fecha local de finalización**. Si cruza medianoche, no se reparte entre dos días. El total de hoy se actualiza al cambiar la fecha o recuperar foco.
+- **Cerrar Electron durante una sesión la descarta.** No se recupera ni se guarda parcialmente al reabrir.
+- Si falla un guardado, se muestra un aviso y se puede reintentar conservando los cambios en memoria. No cierres la aplicación hasta resolverlo. Si falla la carga inicial, se impiden escrituras para evitar sobrescribir datos existentes.
+
+Las imágenes se validan y copian con nombre UUID a `backgrounds`; solo ese nombre relativo se guarda en electron-store. Mover o borrar el original no afecta a la copia. Un fondo ausente o corrupto vuelve al predeterminado con aviso en Ajustes, sin borrar datos de estudio. El [origen del fondo predeterminado](src/assets/editorial/README.md) se documenta por separado.
+
+## Capturas y validación de la versión candidata
+
+Las capturas de `docs/screenshots/` proceden de la aplicación ejecutándose con datos de prueba; no son mockups. El fondo decorativo predeterminado tiene la procedencia indicada arriba.
+
+![Ajustes de apariencia y fondo](docs/screenshots/settings.png)
+
+Consulta el [informe de validación y pruebas de instalación](docs/VALIDATION.md) y la [propuesta de release 1.0.0](docs/RELEASE-1.0.0.md). Los Pomodoros largos se comprueban con reloj simulado; esto no equivale a una prueba real de 50 minutos ni a probar suspensión del sistema.
+
+## Autor
+
+Desarrollado por [dcarpin03](https://github.com/dcarpin03) como proyecto personal de portfolio. Permite demostrar trabajo con componentes y hooks de React, TypeScript, procesos de Electron, IPC, persistencia, recursos locales y distribución en Windows.
