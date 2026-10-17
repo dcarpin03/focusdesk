@@ -2,7 +2,7 @@
 
 Aplicación de escritorio para organizar el estudio en bloques de concentración, gestionar tareas y consultar el tiempo dedicado a cada sección. Funciona localmente, sin cuenta, servidor ni conexión a Internet.
 
-Proyecto de portfolio centrado en una interfaz clara, separación entre React y Electron y persistencia local. **Versión candidata: 1.0.0; pendiente de aprobación para su primera publicación.**
+Proyecto de portfolio centrado en una interfaz clara, separación entre React y Electron y persistencia local. **[Versión 1.0.0 disponible para Windows x64](https://github.com/dcarpin03/focusdesk/releases/tag/v1.0.0).**
 
 ![FocusDesk: sesión Pomodoro en Editorial Premium](docs/screenshots/focusdesk.png)
 
@@ -67,7 +67,7 @@ La carpeta `release/1.0.0/win-unpacked/` permite comprobar la aplicación empaqu
 
 ## Instalación en Windows
 
-La distribución objetivo es Windows 10/11 x64. Descarga el instalador únicamente cuando se publique una versión aprobada en [GitHub Releases](https://github.com/dcarpin03/focusdesk/releases); todavía no se enlaza ninguna versión definitiva.
+Disponible para Windows x64; validado en Windows 11. Descarga [FocusDesk 1.0.0 para Windows x64](https://github.com/dcarpin03/focusdesk/releases/download/v1.0.0/FocusDesk-1.0.0-Windows-x64-Setup.exe) y su [SHA256SUMS.txt](https://github.com/dcarpin03/focusdesk/releases/download/v1.0.0/SHA256SUMS.txt) desde la [release oficial](https://github.com/dcarpin03/focusdesk/releases/tag/v1.0.0).
 
 1. Ejecuta `FocusDesk-1.0.0-Windows-x64-Setup.exe` y sigue el asistente por usuario.
 2. Elige la carpeta y si quieres crear el acceso directo al escritorio.
@@ -90,7 +90,7 @@ Las sesiones conservan su formato original (`id`, `name`, `durationSeconds`, `da
 
 Las imágenes se validan y copian con nombre UUID a `backgrounds`; solo ese nombre relativo se guarda en electron-store. Mover o borrar el original no afecta a la copia. Un fondo ausente o corrupto vuelve al predeterminado con aviso en Ajustes, sin borrar datos de estudio. El [origen del fondo predeterminado](src/assets/editorial/README.md) se documenta por separado.
 
-## Capturas y validación de la versión candidata
+## Capturas y validación
 
 Las capturas de `docs/screenshots/` proceden de la aplicación ejecutándose con datos de prueba; no son mockups. El fondo decorativo predeterminado tiene la procedencia indicada arriba.
 
